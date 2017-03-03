@@ -1,0 +1,203 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// TODO Homework: Fill in or fix all of the methods with TODO comments.
+
+/**
+ * Parses command-line arguments into flag/value pairs, and stores those pairs
+ * in a map for easy access.
+ */
+public class ArgumentMap {
+
+	private final Map<String, String> map;
+
+	/**
+	 * Initializes the argument map.
+	 */
+	public ArgumentMap() {
+		map = new HashMap<>();
+	}
+
+	/**
+	 * Initializes the argument map and parses the specified arguments into
+	 * key/value pairs.
+	 *
+	 * @param args
+	 *            command line arguments
+	 *
+	 * @see #parse(String[])
+	 */
+	public ArgumentMap(String[] args) {
+		this();
+		parse(args);
+	}
+
+	/**
+	 * Parses the specified arguments into key/value pairs and adds them to the
+	 * argument map.
+	 *
+	 * @param args
+	 *            command line arguments
+	 */
+	public void parse(String[] args) {
+		// TODO
+		for (String elem: args){
+			if (isFlag(elem) == true){
+				for(String element: args){
+					if (isValue(element) == true){
+						if(elem.charAt(1) == element.charAt(0))
+							map.put(elem, element);
+					}
+					else
+						map.put(elem, null);
+				}
+			}
+			else
+				if (isValue(elem) == true)
+					map.put(null, elem);
+		}
+	}
+
+	/**
+	 *
+	 * @param arg
+	 * @return
+	 */
+	public static boolean isFlag(String arg) {
+		if (arg != null) {
+			String temp = arg.trim();
+			if (temp.startsWith("-") == true && temp.length() > 1) {
+				return true;
+			}
+		}
+		return false; // TODO
+	}
+
+	/**
+	 *
+	 * @param arg
+	 * @return
+	 */
+	public static boolean isValue(String arg) {
+		if (arg == null)
+			return false;
+		if (arg.length() > 1){
+				if (arg.startsWith("-") == true || arg.equals("") == true){
+					return false;
+				}
+				else
+					return true;
+		}
+		else
+			return false; // TODO
+	}
+
+	/**
+	 * Returns the number of unique flags stored in the argument map.
+	 *
+	 * @return number of flags
+	 */
+	public int numFlags() {
+		int count = 0;
+		for (String key: map.keySet())
+			if (isFlag(key) == true) {
+				if (map.containsKey(key) == true)
+					count = 1;
+				else
+					count++;
+			}
+			else {
+				return count;
+		}
+		return count; // TODO (1 LOC)
+	}
+
+	/**
+	 * Determines whether the specified flag is stored in the argument map.
+	 *
+	 * @param flag
+	 *            flag to test
+	 *
+	 * @return true if the flag is in the argument map
+	 */
+	public boolean hasFlag(String flag) {
+		if (map.containsKey(flag))
+			return true;
+		return false; 
+	}
+
+	/**
+	 * Determines whether the specified flag is stored in the argument map and
+	 * has a non-null value stored with it.
+	 *
+	 * @param flag
+	 *            flag to test
+	 *
+	 * @return true if the flag is in the argument map and has a non-null value
+	 */
+	public boolean hasValue(String flag) {
+		if (map.containsValue(flag))
+			return true;
+		return false; 
+	}
+
+	/**
+	 * Returns the value for the specified flag as a String object.
+	 *
+	 * @param flag
+	 *            flag to get value for
+	 *
+	 * @return value as a String or null if flag or value was not found
+	 */
+	public String getString(String flag) {
+//		if (hasValue(flag) == true)
+//			return map.get(flag);
+		return map.get(flag); // TODO (1 LOC)
+	}
+
+	/**
+	 * Returns the value for the specified flag as a String object. If the flag
+	 * is missing or the flag does not have a value, returns the specified
+	 * default value instead.
+	 *
+	 * @param flag
+	 *            flag to get value for
+	 * @param defaultValue
+	 *            value to return if flag or value is missing
+	 * @return value of flag as a String, or the default value if the flag or
+	 *         value is missing
+	 */
+	public String getString(String flag, String defaultValue) {
+		if (hasFlag(flag) == true)
+			return map.get(flag);
+		return null; // TODO
+	}
+
+	/**
+	 * Returns the value for the specified flag as an int value. If the flag is
+	 * missing or the flag does not have a value, returns the specified default
+	 * value instead.
+	 *
+	 * @param flag
+	 *            flag to get value for
+	 * @param defaultValue
+	 *            value to return if the flag or value is missing
+	 * @return value of flag as an int, or the default value if the flag or
+	 *         value is missing
+	 */
+	public int getInteger(String flag, int defaultValue) {
+		for (int i = 0; i < flag.length(); i++){
+			if(Character.isDigit(flag.indexOf(i))){
+				defaultValue = Integer.parseInt(flag);
+				return defaultValue;
+			}
+		}		
+		return -1;
+//		return defaultValue;
+	}
+
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+}
