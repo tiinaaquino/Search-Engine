@@ -44,8 +44,6 @@ public class HTMLCleaner {
 	 * @return text without any HTML comments
 	 */
 	public static String stripComments(String html) {
-//		return html.replaceAll("<.*?>", " ");
-//		return html.replaceAll("(?s)(?i)<" + "\\n*(.*?)" + "\\n*>", " ");
 		return html.replaceAll("(?s)<!--.*?-->", " ");
 	}
 
@@ -58,7 +56,6 @@ public class HTMLCleaner {
 	 * @return text without any HTML tags
 	 */
 	public static String stripTags(String html) {
-//		return html.replaceAll("<.*?>", " ");
 		return html.replaceAll("(?s)(?i)<" + "\\n*(.*?)" + "\\n*>", " ");
 		
 	}
