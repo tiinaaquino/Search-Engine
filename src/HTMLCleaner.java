@@ -57,7 +57,6 @@ public class HTMLCleaner {
 	 */
 	public static String stripTags(String html) {
 		return html.replaceAll("(?s)(?i)<" + "\\n*(.*?)" + "\\n*>", " ");
-		
 	}
 
 	/**
