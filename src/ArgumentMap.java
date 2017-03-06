@@ -40,21 +40,22 @@ public class ArgumentMap {
 	 *            command line arguments
 	 */
 	public void parse(String[] args) {
-		// TODO
-		for (String elem: args){
+		for (String elem : args) {
 			if (isFlag(elem) == true){
-				for(String element: args){
-					if (isValue(element) == true){
-						if(elem.charAt(1) == element.charAt(0))
-							map.put(elem, element);
-					}
+				map.put(elem, null);
+			}
+		}
+		for (String elem : args) {
+			if (isValue(elem) == true){
+				String valLetter = String.valueOf(elem.charAt(0));
+				for (String entry : map.keySet()){
+					String keyLetter = String.valueOf(entry.charAt(1));
+					if (valLetter.equals(keyLetter))
+						map.replace(entry, elem);
 					else
-						map.put(elem, null);
+						map.replace(null, elem);
 				}
 			}
-			else
-				if (isValue(elem) == true)
-					map.put(null, elem);
 		}
 	}
 
@@ -70,7 +71,7 @@ public class ArgumentMap {
 				return true;
 			}
 		}
-		return false; // TODO
+		return false; 
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class ArgumentMap {
 					return true;
 		}
 		else
-			return false; // TODO
+			return false; 
 	}
 
 	/**
@@ -99,17 +100,16 @@ public class ArgumentMap {
 	 */
 	public int numFlags() {
 		int count = 0;
-		for (String key: map.keySet())
-			if (isFlag(key) == true) {
-				if (map.containsKey(key) == true)
-					count = 1;
-				else
-					count++;
+
+		for (Map.Entry<String, String> flag: map.entrySet()){
+			if (!isFlag(flag.getValue()) == true) {
+				map.remove(flag);
+				count = (int) map.values().stream().distinct().count();
 			}
-			else {
+			else 
 				return count;
 		}
-		return count; // TODO (1 LOC)
+		return count;
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class ArgumentMap {
 	 * @return true if the flag is in the argument map and has a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		if (map.containsValue(flag))
+		if (map.containsValue(flag) && map.get(flag)!= null)
 			return true;
 		return false; 
 	}
@@ -150,9 +150,7 @@ public class ArgumentMap {
 	 * @return value as a String or null if flag or value was not found
 	 */
 	public String getString(String flag) {
-//		if (hasValue(flag) == true)
-//			return map.get(flag);
-		return map.get(flag); // TODO (1 LOC)
+		return map.get(flag); 
 	}
 
 	/**
@@ -168,9 +166,13 @@ public class ArgumentMap {
 	 *         value is missing
 	 */
 	public String getString(String flag, String defaultValue) {
-		if (hasFlag(flag) == true)
-			return map.get(flag);
-		return null; // TODO
+		if (hasFlag(flag) == true){
+			if (map.get(flag) != null)
+				return map.get(flag);
+			else
+				return defaultValue;
+		}
+		return defaultValue; 
 	}
 
 	/**
@@ -186,14 +188,7 @@ public class ArgumentMap {
 	 *         value is missing
 	 */
 	public int getInteger(String flag, int defaultValue) {
-		for (int i = 0; i < flag.length(); i++){
-			if(Character.isDigit(flag.indexOf(i))){
-				defaultValue = Integer.parseInt(flag);
-				return defaultValue;
-			}
-		}		
-		return -1;
-//		return defaultValue;
+		return defaultValue;
 	}
 
 	@Override
