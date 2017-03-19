@@ -5,14 +5,6 @@ import java.util.TreeSet;
 /**
  * Cleans simple, validating HTML 4/5 into plain-text words using regular
  * expressions.
- *
- * @see <a href="https://validator.w3.org/">validator.w3.org</a>
- * @see <a href="https://www.w3.org/TR/html51/">HTML 5.1 Specification</a>
- * @see <a href="https://www.w3.org/TR/html401/">HTML 4.01 Specification</a>
- *
- * @see java.util.regex.Pattern
- * @see java.util.regex.Matcher
- * @see java.lang.String#replaceAll(String, String)
  */
 public class HTMLCleaner {
 
