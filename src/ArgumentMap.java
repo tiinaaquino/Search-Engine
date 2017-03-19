@@ -82,15 +82,9 @@ public class ArgumentMap {
 	public static boolean isValue(String arg) {
 		if (arg == null)
 			return false;
-		if (arg.length() > 1){
-				if (arg.startsWith("-") == true || arg.equals("") == true){
-					return false;
-				}
-				else
-					return true;
-		}
-		else
-			return false; 
+		if (arg.trim().startsWith("-") || arg.trim().isEmpty())
+			return false;
+		return true;
 	}
 
 	/**
@@ -99,17 +93,7 @@ public class ArgumentMap {
 	 * @return number of flags
 	 */
 	public int numFlags() {
-		int count = 0;
-
-		for (Map.Entry<String, String> flag: map.entrySet()){
-			if (!isFlag(flag.getValue()) == true) {
-				map.remove(flag);
-				count = (int) map.values().stream().distinct().count();
-			}
-			else 
-				return count;
-		}
-		return count;
+		return map.size();
 	}
 
 	/**
@@ -137,7 +121,9 @@ public class ArgumentMap {
 	 */
 	public boolean hasValue(String flag) {
 		if (map.containsValue(flag) && map.get(flag)!= null)
+		{
 			return true;
+		}
 		return false; 
 	}
 
@@ -188,6 +174,12 @@ public class ArgumentMap {
 	 *         value is missing
 	 */
 	public int getInteger(String flag, int defaultValue) {
+		for (int i = 0; i < flag.length(); i++){
+			if(Character.isDigit(flag.indexOf(i))){
+				defaultValue = Integer.parseInt(flag);
+				return defaultValue;
+			}
+		}		
 		return defaultValue;
 	}
 
