@@ -1,8 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO Homework: Fill in or fix all of the methods with TODO comments.
-
 /**
  * Parses command-line arguments into flag/value pairs, and stores those pairs
  * in a map for easy access.
@@ -40,20 +38,22 @@ public class ArgumentMap {
 	 *            command line arguments
 	 */
 	public void parse(String[] args) {
-		for (String elem : args) {
-			if (isFlag(elem) == true){
-				map.put(elem, null);
+		for (int i = 0; i < args.length; i++) {
+			if ((isFlag(args[i]))) {
+				map.put(args[i], null);
 			}
-		}
-		for (String elem : args) {
-			if (isValue(elem) == true){
-				String valLetter = String.valueOf(elem.charAt(0));
-				for (String entry : map.keySet()){
-					String keyLetter = String.valueOf(entry.charAt(1));
-					if (valLetter.equals(keyLetter))
-						map.replace(entry, elem);
-					else
-						map.replace(null, elem);
+			
+			if (i == args.length - 1 && isFlag(args[i])) {
+				map.put(args[i], null);
+			}
+			
+			else if (isFlag(args[i])) {	
+				if (isFlag(args[i+1])) {
+					map.put(args[i], null);
+				}
+				
+				else {
+					map.put(args[i], args[i+1]);
 				}
 			}
 		}
@@ -105,9 +105,7 @@ public class ArgumentMap {
 	 * @return true if the flag is in the argument map
 	 */
 	public boolean hasFlag(String flag) {
-		if (map.containsKey(flag))
-			return true;
-		return false; 
+		return map.containsKey(flag);
 	}
 
 	/**
@@ -120,11 +118,7 @@ public class ArgumentMap {
 	 * @return true if the flag is in the argument map and has a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		if (map.containsValue(flag) && map.get(flag)!= null)
-		{
-			return true;
-		}
-		return false; 
+		return map.get(flag) != null;
 	}
 
 	/**
@@ -181,6 +175,19 @@ public class ArgumentMap {
 			}
 		}		
 		return defaultValue;
+	}
+	
+	/**
+	 * Returns the value for the specified flag.
+	 * 
+	 * @param flag
+	 * 				flag to get value for
+	 * @return value of flag
+	 */
+	public String getValue(String flag) {
+		if (map.containsKey(flag) && map.get(flag) != null)
+			return map.get(flag);
+		return null;
 	}
 
 	@Override
