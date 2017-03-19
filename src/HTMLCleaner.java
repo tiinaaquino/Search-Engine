@@ -1,6 +1,8 @@
+import java.text.Normalizer;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 /**
  * Cleans simple, validating HTML 4/5 into plain-text words using regular
@@ -8,6 +10,8 @@ import java.util.TreeSet;
  */
 public class HTMLCleaner {
 
+	public static final Pattern CLEAN_REGEX = Pattern.compile("(?U)[^\\p{Alpha}\\p{Space}]+");
+	
 	/**
 	 * Replaces all HTML entities with a single space. For example,
 	 * "2010&ndash;2012" will become "2010 2012".
@@ -94,5 +98,11 @@ public class HTMLCleaner {
 		html = stripEntities(html);
 
 		return html;
+	}
+	
+	public static String cleanString(String s){
+		s = Normalizer.normalize(s, Normalizer.Form.NFC);
+		s = CLEAN_REGEX.matcher(s).replaceAll(" ");
+		return s;
 	}
 }
