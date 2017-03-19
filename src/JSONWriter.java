@@ -78,9 +78,7 @@ public class JSONWriter {
 	 *            path to write file
 	 * @throws IOException
 	 */
-	public static void asArray(TreeSet<Integer> elements, Path path) throws IOException {
-		// TODO Use try-with-resources (no catch block needed)
-		
+	public static void asArray(TreeSet<Integer> elements, Path path) throws IOException {		
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			
 			asArray(writer, elements, 0);
@@ -97,7 +95,6 @@ public class JSONWriter {
 	 * @throws IOException
 	 */
 	public static void asObject(TreeMap<String, Integer> elements, Path path) throws IOException {
-		
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			
 			writer.write("{");
@@ -136,34 +133,59 @@ public class JSONWriter {
 	 *            path to write file
 	 * @throws IOException
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Path path) throws IOException {
-		
-		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+	public static void asNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path) throws IOException {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);) {
 			writer.write("{");
-			if (elements.isEmpty()){
-				writer.write(System.lineSeparator());
-				writer.write("}");
-			}
-			else {
-				writer.write(System.lineSeparator());
-				String last = elements.lastKey();
-//				Map.Entry<String, TreeSet<Integer>> entry = elements.lastEntry();
+			
+			int i = 0;
+			int j = 0;
+			int pathCount = 0;
+			int positionCount = 0;
+			
+			for (String k : elements.keySet()) {
+				writer.write("\n" + indent(1) + quote(k) + ": {\n");
+				int l = 0;
+				
+				for (String m : elements.get(k).keySet()) {
+					i = 0;
+					int numCommas = 0;
+					pathCount = elements.get(k).size();
+					writer.write(indent(2) + quote(String.valueOf(m)) + ": [");
+					
+					for (int n : elements.get(k).get(m)) {
+						positionCount = elements.get(k).get(m).size();
+						writer.write("\n"+indent(3) + n);
+						
+						while (i < positionCount-1) {
+							i++;
+							writer.write(",");
+							break;
+						}
+						
+						if (positionCount-1 >= numCommas) {
+							if (positionCount-1 == numCommas) {
+								writer.write("\n"+indent(2) + "]");
 								
-				for (Map.Entry<String, TreeSet<Integer>> entry: elements.entrySet()) {					
-					writer.write(indent(1));
-					writer.write("\"" + entry.getKey()+ "\": ");
-					asArray(writer, entry.getValue(), 0);
-
-//					if (entry != last) {
-					if (entry.getKey() != last) {
-						writer.write(",");
+								while (l < pathCount-1) {
+									l++;
+									writer.write(",");
+									break;
+								}
+							}
+							numCommas++;
+						}
 					}
-					writer.write(System.lineSeparator());
+					writer.write("\n");
 				}
-				writer.write("}");
-				writer.write(System.lineSeparator());
-				writer.flush();
+				writer.write(indent(1) + "}");
+				
+				while (j < elements.size()-1) {
+					writer.write(",");
+					j++;
+					break;
+				}
 			}
+			writer.write("\n}");
 		}
 	}
 }
