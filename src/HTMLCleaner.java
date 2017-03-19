@@ -100,6 +100,15 @@ public class HTMLCleaner {
 		return html;
 	}
 	
+	/**
+	 * Removes all characters that are non-alpha and non-whitespace 
+	 * then converts the string to all lowercase and converts it to
+	 * a "normalized" form.
+	 * 
+	 * @param s
+	 * 			text to be cleaned
+	 * @return cleaned string
+	 */
 	public static String cleanString(String s){
 		s = Normalizer.normalize(s, Normalizer.Form.NFC);
 		s = CLEAN_REGEX.matcher(s).replaceAll(" ");
