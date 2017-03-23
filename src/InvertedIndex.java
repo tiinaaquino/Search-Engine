@@ -21,32 +21,6 @@ public class InvertedIndex {
 	public InvertedIndex(){
 		index = new TreeMap<String, TreeMap<String, TreeSet<Integer>>>();
 	}
-
-	// TODO Remove
-	/**
-	 * Returns a String with the specified number of tab characters.
-	 *
-	 * @param times
-	 *            number of tab characters to include
-	 * @return tab characters repeated the specified number of times
-	 */
-	public static String indent(int times) {
-		char[] tabs = new char[times];
-		Arrays.fill(tabs, '\t');
-		return String.valueOf(tabs);
-	}
-	
-	// TODO Remove
-	/**
-	 * Returns a quoted version of the provided text.
-	 *
-	 * @param text
-	 *            text to surround in quotes
-	 * @return text surrounded by quotes
-	 */
-	public static String quote(String text) {
-		return String.format("\"%s\"", text);
-	}
 	
 	/**
 	 * Returns number of words in the index.
