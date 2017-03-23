@@ -3,6 +3,11 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+// TODO Always address any warnings
+// TODO Configure Eclipse to "Organize Imports" every time you save and never get the unused import warning again!
+// TODO JavaDoc comments to all classes and members
+
+
 public class Driver 
 {
 	public static void main(String[] args)
@@ -12,6 +17,17 @@ public class Driver
 		String defaultValue = "index.json";
 		
 		System.out.println(Arrays.toString(args));
+		
+		// TODO 
+//		if (map.hasFlag("-index")) {
+//			try {
+//				build the index here
+//			}
+//			catch (Exception e) {
+//				System.out.println("Unable to build index from " + map.getString("-index"));
+//			}
+//		}
+		
 		
 		try {
 			// map without an index flag and without a path flag

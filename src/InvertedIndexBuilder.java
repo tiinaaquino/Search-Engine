@@ -19,7 +19,7 @@ public class InvertedIndexBuilder {
 	 * @throws IOException
 	 */
 	
-	public static void traverseDirectory(Path path, InvertedIndex index) throws IOException 
+	public static void traverseDirectory(Path path, InvertedIndex index) throws IOException  // TODO Remove
 	{
 		traverse(path, index);
 	}
@@ -47,14 +47,31 @@ public class InvertedIndexBuilder {
 					}
 				}
 			}
-			catch (Exception e) {
+			catch (Exception e) { // TODO Remove the catch
 				e.printStackTrace();
 			}
-		}
+		} // TODO else if...
 		if (path.toString().toLowerCase().endsWith("html") || path.toString().toLowerCase().endsWith("htm")) {
 			buildIndex(path, index);
 		}
 	}
+	
+	/* TODO
+	public static void traverse(Path path, InvertedIndex index) throws IOException {
+		if (Files.isDirectory(path)) {
+			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
+				
+				for (Path extension : listing) {
+					traverse(extension, index);
+				}
+			}
+		}
+		else if (path.toString().toLowerCase().endsWith("html") || path.toString().toLowerCase().endsWith("htm")) {
+			buildIndex(path, index);
+		}
+		
+	}
+	*/
 	
 	/**
 	 * Reads through the file, cleans HTML tags, parses the words then

@@ -56,6 +56,15 @@ public class ArgumentMap {
 					map.put(args[i], args[i+1]);
 				}
 			}
+			
+			// TODO Whenever we see repeated code, there is a way to rethink the problem
+			
+//			if (isFlag(args[i]) && i < args.length && !isFlag(args[i+1])) {
+//				map.put(args[i], args[i+1]);
+//			}
+//			else if (isFlag(args[i])) {
+//				map.put(args[i], null);
+//			}
 		}
 	}
 
@@ -80,6 +89,7 @@ public class ArgumentMap {
 	 * @return
 	 */
 	public static boolean isValue(String arg) {
+		// TODO Always use braces with if statements (goto fail; apple bug) (can configure eclipse to fix for you)
 		if (arg == null)
 			return false;
 		if (arg.trim().startsWith("-") || arg.trim().isEmpty())
@@ -147,7 +157,7 @@ public class ArgumentMap {
 	 */
 	public String getString(String flag, String defaultValue) {
 		if (hasFlag(flag) == true){
-			if (map.get(flag) != null)
+			if (map.get(flag) != null) // TODO Only need this test really
 				return map.get(flag);
 			else
 				return defaultValue;
@@ -175,6 +185,14 @@ public class ArgumentMap {
 			}
 		}		
 		return defaultValue;
+
+		// TODO 
+//		try {
+//			return Integer.parseInt(map.get(flag));
+//		}
+//		catch (Exception e) {
+//			return defaultValue;
+//		}
 	}
 	
 	/**
@@ -186,7 +204,7 @@ public class ArgumentMap {
 	 */
 	public String getValue(String flag) {
 		if (map.containsKey(flag) && map.get(flag) != null)
-			return map.get(flag);
+			return map.get(flag); // TODO Only need this line
 		return null;
 	}
 

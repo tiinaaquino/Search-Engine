@@ -123,6 +123,20 @@ public class JSONWriter {
 		}
 	}
 	
+	/*
+	 * TODO
+	 * Try to optimize JSON Writer a bit.
+	 * https://repl.it/FxRZ/0
+	 * asArrayIterator2
+	 * asArrayHeadSet or asArrayTailSet
+	 * 
+	 * Make helper methods so that your final method is somethig simple like
+	 * 
+	 * for every key/value pair
+	 * 		output the key: 
+	 * 		helper method on the value
+	 */
+	
 	/**
 	 * Writes the set of elements as a JSON object with a nested array to the
 	 * path using UTF8.
