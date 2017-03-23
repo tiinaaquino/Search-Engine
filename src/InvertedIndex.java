@@ -22,6 +22,7 @@ public class InvertedIndex {
 		index = new TreeMap<String, TreeMap<String, TreeSet<Integer>>>();
 	}
 
+	// TODO Remove
 	/**
 	 * Returns a String with the specified number of tab characters.
 	 *
@@ -35,6 +36,7 @@ public class InvertedIndex {
 		return String.valueOf(tabs);
 	}
 	
+	// TODO Remove
 	/**
 	 * Returns a quoted version of the provided text.
 	 *
@@ -67,7 +69,11 @@ public class InvertedIndex {
 		if (index.containsKey(word))
 			return true;
 		return false;
+		
+		// TODO return (index.containsKey(word));
 	}
+	
+	// TODO Add more contains/size methods like... contains(String word, String file), etc.
 	
 	/**
 	 * Stores the word, its path, and word position
@@ -110,7 +116,7 @@ public class InvertedIndex {
 	 * 				array of words to add
 	 * @param path
 	 */
-	public void addAll (String[] words, Path path){
+	public void addAll(String[] words, Path path) {
 		int position = 1;
 		for (String i : words) {
 			add(i, path.toString(), position);

@@ -20,11 +20,11 @@ public class HTMLCleaner {
 	 *            text including HTML entities to remove
 	 * @return text without any HTML entities
 	 */
-	public static String stripEntities(String html) {
+	public static String stripEntities(String html) { // TODO Don't worry about null
 		if (html == null)
 			return null;
 		else{
-			String newWord = html.replaceAll("&.*?;", " ");
+			String newWord = html.replaceAll("&.*?;", " "); // TODO Just return this?
 			if (html.contains("& "))
 				return html;
 			return newWord;
@@ -76,7 +76,8 @@ public class HTMLCleaner {
 		if (html == null)
 			return null;
 		else {
-			return html.replaceAll("(?s)(?i)<" + name + "\\s*(.*?)" + name + "\\s*>", " ");
+			// TODO (?si)
+			return html.replaceAll("(?s)(?i)<" + name + "\\s*(.*?)" + name + "\\s*>", " "); // TODO Just keep this line, don't worry about null
 			}
 	}
 
@@ -100,6 +101,7 @@ public class HTMLCleaner {
 		return html;
 	}
 	
+	// TODO Remove this from here
 	/**
 	 * Removes all characters that are non-alpha and non-whitespace 
 	 * then converts the string to all lowercase and converts it to
