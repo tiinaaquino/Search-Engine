@@ -89,11 +89,14 @@ public class ArgumentMap {
 	 * @return
 	 */
 	public static boolean isValue(String arg) {
-		// TODO Always use braces with if statements (goto fail; apple bug) (can configure eclipse to fix for you)
 		if (arg == null)
+		{
 			return false;
+		}
 		if (arg.trim().startsWith("-") || arg.trim().isEmpty())
+		{
 			return false;
+		}
 		return true;
 	}
 
@@ -177,14 +180,14 @@ public class ArgumentMap {
 	 * @return value of flag as an int, or the default value if the flag or
 	 *         value is missing
 	 */
-	public int getInteger(String flag, int defaultValue) {
-		for (int i = 0; i < flag.length(); i++){
-			if(Character.isDigit(flag.indexOf(i))){
-				defaultValue = Integer.parseInt(flag);
-				return defaultValue;
-			}
-		}		
-		return defaultValue;
+	public int getInteger(String flag, int defaultValue) {	
+		try {
+			return Integer.parseInt(map.get(flag));
+		}
+		catch (Exception e) {
+			return defaultValue;
+		}
+
 
 		// TODO 
 //		try {
@@ -203,9 +206,7 @@ public class ArgumentMap {
 	 * @return value of flag
 	 */
 	public String getValue(String flag) {
-		if (map.containsKey(flag) && map.get(flag) != null)
-			return map.get(flag); // TODO Only need this line
-		return null;
+		return map.get(flag);
 	}
 
 	@Override
