@@ -8,6 +8,9 @@ import java.util.Arrays;
 // TODO JavaDoc comments to all classes and members
 
 
+/**
+ * Parses command-line arguments into the index.
+ */
 public class Driver 
 {
 	public static void main(String[] args)
