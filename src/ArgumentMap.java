@@ -187,15 +187,6 @@ public class ArgumentMap {
 		catch (Exception e) {
 			return defaultValue;
 		}
-
-
-		// TODO 
-//		try {
-//			return Integer.parseInt(map.get(flag));
-//		}
-//		catch (Exception e) {
-//			return defaultValue;
-//		}
 	}
 	
 	/**
