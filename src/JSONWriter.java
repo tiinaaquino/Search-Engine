@@ -127,10 +127,11 @@ public class JSONWriter {
 	 * TODO
 	 * Try to optimize JSON Writer a bit.
 	 * https://repl.it/FxRZ/0
-	 * asArrayIterator2
+	 * asArrayIterator2 
+	 * 			// for asArray
 	 * asArrayHeadSet or asArrayTailSet
 	 * 
-	 * Make helper methods so that your final method is somethig simple like
+	 * Make helper methods so that your final method is something simple like
 	 * 
 	 * for every key/value pair
 	 * 		output the key: 
