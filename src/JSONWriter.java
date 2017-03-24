@@ -49,24 +49,41 @@ public class JSONWriter {
 	 * @throws IOException
 	 */
 	private static void asArray(Writer writer, TreeSet<Integer> elements, int level) throws IOException {
-		Iterator<Integer> iterator = elements.iterator();
-		
+//		Iterator<Integer> iterator = elements.iterator();
+//		
+//		writer.write("[");
+//		writer.write(System.lineSeparator());
+//		
+//		while(iterator.hasNext()) {
+//			writer.write(indent(level + 1));
+//			writer.write(iterator.next().toString());
+//			
+//			if (iterator.hasNext()) {
+//				writer.write(",");
+//			}
+//			writer.write(System.lineSeparator());
+//		}
+//		
+//		writer.write("]");
+//		writer.write(System.lineSeparator());
+//		writer.flush();
+				
 		writer.write("[");
 		writer.write(System.lineSeparator());
 		
-		while(iterator.hasNext()) {
+		if (elements.isEmpty()) {
 			writer.write(indent(level + 1));
-			writer.write(iterator.next().toString());
-			
-			if (iterator.hasNext()) {
+		}
+		else {
+			writer.write(indent(level + 1) + elements.first().toString());
+			for (Integer elem: elements.tailSet(elements.first(), false)) {
 				writer.write(",");
+				writer.write(System.lineSeparator());
+				writer.write(indent(level + 1) + elem.toString());
 			}
 			writer.write(System.lineSeparator());
+			writer.write(indent(level) + "]");
 		}
-		
-		writer.write("]");
-		writer.write(System.lineSeparator());
-		writer.flush();
 	}
 
 	/**
