@@ -159,13 +159,12 @@ public class ArgumentMap {
 	 *         value is missing
 	 */
 	public String getString(String flag, String defaultValue) {
-		if (hasFlag(flag) == true){
-			if (map.get(flag) != null) // TODO Only need this test really
-				return map.get(flag);
-			else
-				return defaultValue;
+		if (map.get(flag) != null) {
+			return map.get(flag);	
 		}
-		return defaultValue; 
+		else {
+			return defaultValue;
+		}
 	}
 
 	/**
