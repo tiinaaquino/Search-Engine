@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Stores input into the InvertedIndex data structure.
+ * Data structure to store paths, strings, and their positions.
  *
  */
 public class InvertedIndex {
