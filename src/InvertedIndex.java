@@ -1,16 +1,20 @@
-import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Stores input into the InvertedIndex data structure.
+ *
+ */
 public class InvertedIndex {
 	
+	/**
+	 * Data structure variable to store input.
+	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	
 	/**
@@ -32,7 +36,7 @@ public class InvertedIndex {
 	}
 	
 	/**
-	 * Returns whether the word is in the index.\
+	 * Returns whether the word is in the index.
 	 * 
 	 * @param word
 	 * 				word to find
@@ -43,8 +47,29 @@ public class InvertedIndex {
 		return index.containsKey(word);
 	}
 	
-	// TODO Add more contains/size methods like... contains(String word, String file), etc.
-	
+	/**
+	 * Returns whether the word is in the file.
+	 * 
+	 * @param word
+	 * 				word to find
+	 * @param file
+	 * 				file to look through
+	 * @return true if the word is in the index,
+	 * otherwise false;
+	 *
+	 * @throws FileNotFoundException
+	 */
+	public boolean contains(String word, File file) throws FileNotFoundException {
+		Scanner scanner = new Scanner(file);
+		while (scanner.hasNextLine()) {
+			String nextWord = scanner.next();
+			if (nextWord.equalsIgnoreCase(word)){
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	/**
 	 * Stores the word, its path, and word position
 	 * to the index
