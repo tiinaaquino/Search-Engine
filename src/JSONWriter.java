@@ -96,7 +96,7 @@ public class JSONWriter {
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			
 			writer.write("{");
-			if (elements.isEmpty()){
+			if (elements.isEmpty()) {
 				writer.write(System.lineSeparator());
 				writer.write("}");
 			}
