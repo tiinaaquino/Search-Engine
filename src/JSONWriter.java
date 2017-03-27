@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Stores object to JSON format
+ */
 public class JSONWriter {
 
 	/**
@@ -48,26 +51,7 @@ public class JSONWriter {
 	 *            number of times to indent the array itself
 	 * @throws IOException
 	 */
-	private static void asArray(Writer writer, TreeSet<Integer> elements, int level) throws IOException {
-//		Iterator<Integer> iterator = elements.iterator();
-//		
-//		writer.write("[");
-//		writer.write(System.lineSeparator());
-//		
-//		while(iterator.hasNext()) {
-//			writer.write(indent(level + 1));
-//			writer.write(iterator.next().toString());
-//			
-//			if (iterator.hasNext()) {
-//				writer.write(",");
-//			}
-//			writer.write(System.lineSeparator());
-//		}
-//		
-//		writer.write("]");
-//		writer.write(System.lineSeparator());
-//		writer.flush();
-				
+	private static void asArray(Writer writer, TreeSet<Integer> elements, int level) throws IOException {				
 		writer.write("[");
 		writer.write(System.lineSeparator());
 		
@@ -97,7 +81,6 @@ public class JSONWriter {
 	 */
 	public static void asArray(TreeSet<Integer> elements, Path path) throws IOException {		
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-			
 			asArray(writer, elements, 0);
 		}
 	}
@@ -140,20 +123,27 @@ public class JSONWriter {
 		}
 	}
 	
-	/*
-	 * TODO
-	 * Try to optimize JSON Writer a bit.
-	 * https://repl.it/FxRZ/0
-	 * asArrayIterator2 
-	 * 			// for asArray
-	 * asArrayHeadSet or asArrayTailSet
-	 * 
-	 * Make helper methods so that your final method is something simple like
-	 * 
-	 * for every key/value pair
-	 * 		output the key: 
-	 * 		helper method on the value
+	/**
+	 * Helper method to output the key for every key/ value pair
+	 * @param elements
+	 *  			key/ value pair
 	 */
+	public static void printKeys(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
+		for (Map.Entry<String, TreeMap<String, TreeSet<Integer>>> entry: elements.entrySet()) {
+			System.out.println(entry.getKey());
+		}
+	}
+	
+	/**
+	 * Helper method to output the value for every key/ value pair
+	 * @param elements
+	 * 			key/ value pair
+	 */
+	public static void printValues(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
+		for (Map.Entry<String, TreeMap<String, TreeSet<Integer>>> entry: elements.entrySet()) {
+			System.out.println(entry.getValue());
+		}
+	}
 	
 	/**
 	 * Writes the set of elements as a JSON object with a nested array to the
