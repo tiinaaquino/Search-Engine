@@ -1,9 +1,3 @@
-import java.text.Normalizer;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
-
 /**
  * Cleans simple, validating HTML 4/5 into plain-text words using regular
  * expressions.

@@ -51,6 +51,7 @@ public class InvertedIndex {
 	}
 	
 	/**
+	 * Helper method
 	 * Returns whether the word is in the file.
 	 * 
 	 * @param word
