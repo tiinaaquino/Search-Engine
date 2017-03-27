@@ -40,11 +40,7 @@ public class InvertedIndex {
 	 * otherwise false.
 	 */
 	public boolean contains(String word) {
-		if (index.containsKey(word))
-			return true;
-		return false;
-		
-		// TODO return (index.containsKey(word));
+		return index.containsKey(word);
 	}
 	
 	// TODO Add more contains/size methods like... contains(String word, String file), etc.
