@@ -87,8 +87,9 @@ public class InvertedIndex {
 		TreeMap<String, TreeSet<Integer>> newIndex;
 		
 		if (index.containsKey(word)){
-			if (oldPositions.containsKey(path))
+			if (oldPositions.containsKey(path)) {
 				oldPositions.get(path).add(wordPosition);
+			}
 			else {
 				newPositions = new TreeSet<Integer>();
 				newPositions.add(wordPosition);
