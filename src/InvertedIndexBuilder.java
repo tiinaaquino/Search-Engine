@@ -1,29 +1,14 @@
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 
+/**
+ * Builds the inverted index data structure.
+ */
 public class InvertedIndexBuilder {
-	
-	
-	/**
-	 * Directory to traverse
-	 * @param path
-	 * @param index
-	 * @throws IOException
-	 */
-	
-	public static void traverseDirectory(Path path, InvertedIndex index) throws IOException  // TODO Remove
-	{
-		traverse(path, index);
-	}
-	
 	
 	/**
 	 * Traverses the directory, if the file ends in "HTML" buildIndex
@@ -33,45 +18,17 @@ public class InvertedIndexBuilder {
 	 * @throws IOException
 	 */
 	public static void traverse(Path path, InvertedIndex index) throws IOException {
-		if (Files.isDirectory(path)) {
-			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
-				
-				for (Path extension : listing) {
-					
-					if (Files.isDirectory(extension)) {
-						traverseDirectory(extension, index);
-					}
-					
-					if (extension.toString().toLowerCase().endsWith(".html") || extension.toString().toLowerCase().endsWith(".htm")) {
-						buildIndex(extension, index);
+			if (Files.isDirectory(path)) {
+				try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
+					for (Path extension : listing) {
+						traverse(extension, index);
 					}
 				}
 			}
-			catch (Exception e) { // TODO Remove the catch
-				e.printStackTrace();
+			else if (path.toString().toLowerCase().endsWith(".html") || path.toString().toLowerCase().endsWith(".htm")) {
+				buildIndex(path, index);
 			}
-		} // TODO else if...
-		if (path.toString().toLowerCase().endsWith("html") || path.toString().toLowerCase().endsWith("htm")) {
-			buildIndex(path, index);
-		}
 	}
-	
-	/* TODO
-	public static void traverse(Path path, InvertedIndex index) throws IOException {
-		if (Files.isDirectory(path)) {
-			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
-				
-				for (Path extension : listing) {
-					traverse(extension, index);
-				}
-			}
-		}
-		else if (path.toString().toLowerCase().endsWith("html") || path.toString().toLowerCase().endsWith("htm")) {
-			buildIndex(path, index);
-		}
-		
-	}
-	*/
 	
 	/**
 	 * Reads through the file, cleans HTML tags, parses the words then
