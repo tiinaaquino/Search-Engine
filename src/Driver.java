@@ -1,11 +1,6 @@
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
-
-// TODO Always address any warnings
-// TODO Configure Eclipse to "Organize Imports" every time you save and never get the unused import warning again!
-// TODO JavaDoc comments to all classes and members
 
 
 /**
@@ -21,62 +16,24 @@ public class Driver
 		
 		System.out.println(Arrays.toString(args));
 		
-		// TODO 
-//		if (map.hasFlag("-index")) {
-//			try {
-//				build the index here
-//			}
-//			catch (Exception e) {
-//				System.out.println("Unable to build index from " + map.getString("-index"));
-//			}
-//		}
-		
-		
-		try {
-			// map without an index flag and without a path flag
-			if (!map.hasFlag("-index") && !map.hasFlag("-path")) {
-				System.out.println("No path and index flag input.");
+		if (map.hasFlag("-path") && map.hasValue("-path")) {
+			try {
+				InvertedIndexBuilder.traverse(Paths.get(map.getValue("-path")), index);
 			}
 			
-			// map without an index flag and with a path flag
-			if (!map.hasFlag("-index") && map.hasFlag("-path")) {
-				if (map.hasValue("-path")) {
-					InvertedIndexBuilder.traverseDirectory(Paths.get(map.getValue("-path")), index);
-				}
+			catch (IOException e) {
+				System.out.println("Unable to build index from the path " + map.getString("-path"));
 			}
-		
-			// map with an index and without a path flag
-			if (map.hasFlag("-index") && !map.hasFlag("-path")) {
-				if (map.hasValue("-index")) {
-					InvertedIndexBuilder.traverseDirectory(Paths.get(map.getValue("-path")), index);
-				}
-				index.asJSON(Paths.get(defaultValue));
-				System.out.println("Contains an index flag.");
+		}
+		if (map.hasFlag("-index")) {
+			String output = map.getString("-index", defaultValue);
+			try {
+				index.asJSON(Paths.get(output));
+
 			}
-			
-			// map with an index flag and a path flag
-			if (map.hasFlag("-index") && map.hasFlag("-path")) {
-				// map with an index value and a path value
-				if (map.hasValue("-index") && map.hasValue("-path")) {
-					InvertedIndexBuilder.traverseDirectory(Paths.get(map.getValue("-path")), index);
-					index.asJSON(Paths.get(map.getValue("-index")));		
-				}
-				
-				// map with a path value and without an index value
-				if (map.hasValue("-path") && !map.hasValue("-index"))  {
-					InvertedIndexBuilder.traverseDirectory(Paths.get(map.getValue("-path")), index);
-					index.asJSON(Paths.get(defaultValue));
-				}
-				
-				// map without a path value and with an index value
-				if (!map.hasValue("-path") && map.hasValue("-index")) {
-					InvertedIndexBuilder.traverseDirectory(Paths.get(map.getValue("-path")), index);
-				}
+			catch (IOException e) {
+				System.out.println("Unable to build index from " + map.getString("-index"));
 			}
-	
-		} 
-		catch (IOException e) {
-			System.out.println(e.toString());
 		}
 	}	
 }
