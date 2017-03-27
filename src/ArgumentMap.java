@@ -37,34 +37,16 @@ public class ArgumentMap {
 	 * @param args
 	 *            command line arguments
 	 */
-	public void parse(String[] args) {
+	public void parse(String[] args) {		
 		for (int i = 0; i < args.length; i++) {
-			if ((isFlag(args[i]))) {
-				map.put(args[i], null);
-			}
-			
-			if (i == args.length - 1 && isFlag(args[i])) {
-				map.put(args[i], null);
-			}
-			
-			else if (isFlag(args[i])) {	
-				if (isFlag(args[i+1])) {
+			if (isFlag(args[i])) {
+				if ( i != args.length - 1 && isValue(args[i + 1])) {
+					map.put(args[i], args[i + 1]);
+				}
+				else {
 					map.put(args[i], null);
 				}
-				
-				else {
-					map.put(args[i], args[i+1]);
-				}
 			}
-			
-			// TODO Whenever we see repeated code, there is a way to rethink the problem
-			
-//			if (isFlag(args[i]) && i < args.length && !isFlag(args[i+1])) {
-//				map.put(args[i], args[i+1]);
-//			}
-//			else if (isFlag(args[i])) {
-//				map.put(args[i], null);
-//			}
 		}
 	}
 
