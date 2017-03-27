@@ -89,12 +89,10 @@ public class ArgumentMap {
 	 * @return
 	 */
 	public static boolean isValue(String arg) {
-		if (arg == null)
-		{
+		if (arg == null) {
 			return false;
 		}
-		if (arg.trim().startsWith("-") || arg.trim().isEmpty())
-		{
+		if (arg.trim().startsWith("-") || arg.trim().isEmpty()) {
 			return false;
 		}
 		return true;
