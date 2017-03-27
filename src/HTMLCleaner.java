@@ -20,17 +20,8 @@ public class HTMLCleaner {
 	 *            text including HTML entities to remove
 	 * @return text without any HTML entities
 	 */
-	public static String stripEntities(String html) { // TODO Don't worry about null
-		if (html == null) {
-			return null;
-		}
-		else {
-			String newWord = html.replaceAll("&.*?;", " "); // TODO Just return this?
-			if (html.contains("& ")) {
-				return html;
-			}
-			return newWord;
-		}
+	public static String stripEntities(String html) {
+		return html.replaceAll("&.*?;", " "); 
 	}
 
 	/**
@@ -75,13 +66,7 @@ public class HTMLCleaner {
 	 * @return text without that HTML element
 	 */
 	public static String stripElement(String html, String name) {
-		if (html == null) {
-			return null;
-		}
-		else {
-			// TODO (?si)
-			return html.replaceAll("(?s)(?i)<" + name + "\\s*(.*?)" + name + "\\s*>", " "); // TODO Just keep this line, don't worry about null
-			}
+		return html.replaceAll("(?si)<" + name + "\\s*(.*?)" + name + "\\s*>", " ");
 	}
 
 	/**
