@@ -2,7 +2,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -68,6 +72,24 @@ public class InvertedIndex {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns a copy of the words in this index as a sorted list.
+	 *
+	 * @return sorted list of words
+	 *
+	 * @see ArrayList#ArrayList(java.util.Collection)
+	 * @see Collections#sort(List)
+	 */
+	public List<String> copyWords() {
+
+		List<String> words = new ArrayList<String>();
+		for(String word: index.keySet()){
+			words.add(word);
+		}
+		Collections.sort(words);
+		return words;
 	}
 		
 	/**
