@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
  * expressions.
  */
 public class HTMLCleaner {
-
-	public static final Pattern CLEAN_REGEX = Pattern.compile("(?U)[^\\p{Alpha}\\p{Space}]+");
 	
 	/**
 	 * Replaces all HTML entities with a single space. For example,
