@@ -14,8 +14,10 @@ public class InvertedIndexBuilder {
 	 * Traverses the directory, if the file ends in "HTML" buildIndex
 	 * method is called
 	 * 
-	 * @param path TODO describe the parameters...
-	 * @param index the inverted index to add words to
+	 * @param path
+	 * 				path to traverse
+	 * @param index 
+	 * 				the inverted index to add words to
 	 * @throws IOException
 	 */
 	public static void traverse(Path path, InvertedIndex index) throws IOException {
@@ -36,7 +38,10 @@ public class InvertedIndexBuilder {
 	 * adds them to the index.
 	 * 
 	 * @param path
+	 * 				path to add to the index
 	 * @param index
+	 * 				data structure to add in the words
+	 * 				from the path
 	 * @throws IOException
 	 */
 	public static void buildIndex(Path path, InvertedIndex index) throws IOException {
