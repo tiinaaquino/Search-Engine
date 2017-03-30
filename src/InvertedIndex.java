@@ -57,7 +57,7 @@ public class InvertedIndex {
 	// TODO Add something like this for word, location, position
 	// TODO numLocations(String word)... numPositions(String word, String location)
 	
-	// TODO
+	// TODO make it String file... not File file
 	/**
 	 * Helper method
 	 * Returns whether the word is in the file.
@@ -91,15 +91,7 @@ public class InvertedIndex {
 	 * @see Collections#sort(List)
 	 */
 	public List<String> copyWords() {
-
-		List<String> words = new ArrayList<String>();
-		for(String word: index.keySet()){
-			words.add(word);
-		}
-		// TODO rather than adding one at a time... return new ArrayList<String>(index.keySet());
-		
-		Collections.sort(words); // TODO Keys are already sorted in a treemap
-		return words;
+		return new ArrayList<String>(index.keySet());
 	}
 		
 	/**
