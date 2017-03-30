@@ -50,6 +50,14 @@ public class InvertedIndex {
 		return index.containsKey(word);
 	}
 	
+//	public boolean contains(String word, String location) {
+//		return index.containsKey(word) && index.get(word).containsKey(location);
+//	}
+	
+	// TODO Add something like this for word, location, position
+	// TODO numLocations(String word)... numPositions(String word, String location)
+	
+	// TODO
 	/**
 	 * Helper method
 	 * Returns whether the word is in the file.
@@ -88,7 +96,9 @@ public class InvertedIndex {
 		for(String word: index.keySet()){
 			words.add(word);
 		}
-		Collections.sort(words);
+		// TODO rather than adding one at a time... return new ArrayList<String>(index.keySet());
+		
+		Collections.sort(words); // TODO Keys are already sorted in a treemap
 		return words;
 	}
 		
@@ -125,6 +135,17 @@ public class InvertedIndex {
 			newIndex.put(path, newPositions);
 			index.put(word, newIndex);
 		}
+		
+		// TODO
+//		if (!index.containsKey(word)) { // index.get(word) == null
+//			index.put(word, new TreeMap<>());
+//		}
+//		
+//		if (!index.get(word).containsKey(path)) { // index.get(word).get(path) == null
+//			index.get(word).put(path, new TreeSet<>());
+//		}
+//		
+//		index.get(word).get(path).add(wordPosition);
 	}
 	
 	/**
