@@ -49,7 +49,7 @@ public class JSONWriter {
 	 *            number of times to indent the array itself
 	 * @throws IOException
 	 */
-	private static void asArray(Writer writer, TreeSet<Integer> elements, int level) throws IOException {				
+	private static void asArray(Writer writer, TreeSet<Integer> elements, int level) throws IOException {
 		writer.write("[");
 		writer.write(System.lineSeparator());
 		
