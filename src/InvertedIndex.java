@@ -106,38 +106,15 @@ public class InvertedIndex {
 	 * 				word position to store
 	 */
 	public void add(String word, String path, int wordPosition) {
-		TreeMap<String, TreeSet<Integer>> oldPositions = index.get(word);
-		TreeSet<Integer> newPositions;
-		TreeMap<String, TreeSet<Integer>> newIndex;
-		
-		if (index.containsKey(word)){
-			if (oldPositions.containsKey(path)) {
-				oldPositions.get(path).add(wordPosition);
-			}
-			else {
-				newPositions = new TreeSet<Integer>();
-				newPositions.add(wordPosition);
-				oldPositions.put(path, newPositions);
-			}
-		}
-		else {
-			newPositions = new TreeSet<Integer>();
-			newPositions.add(wordPosition);
-			newIndex = new TreeMap<String, TreeSet<Integer>>();
-			newIndex.put(path, newPositions);
-			index.put(word, newIndex);
+		if (!index.containsKey(word)) {
+			index.put(word, new TreeMap<>());
 		}
 		
-		// TODO
-//		if (!index.containsKey(word)) { // index.get(word) == null
-//			index.put(word, new TreeMap<>());
-//		}
-//		
-//		if (!index.get(word).containsKey(path)) { // index.get(word).get(path) == null
-//			index.get(word).put(path, new TreeSet<>());
-//		}
-//		
-//		index.get(word).get(path).add(wordPosition);
+		if (!index.get(word).containsKey(path)) {
+			index.get(word).put(path, new TreeSet<>());
+		}
+		
+		index.get(word).get(path).add(wordPosition);
 	}
 	
 	/**
