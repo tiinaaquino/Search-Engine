@@ -2,17 +2,17 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-// TODO Check your warnings...
-
 /**
  * Parses command-line arguments into the index.
  */
 public class Driver 
 {
 	/**
-	 * TODO
+	 * Builds the inverted index data structure
 	 * 
 	 * @param args
+	 * 				arguments to be parsed into
+	 * 				into the index
 	 */
 	public static void main(String[] args)
 	{	
