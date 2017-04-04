@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -39,6 +40,41 @@ public class InvertedIndex {
 	}
 	
 	/**
+	 * 
+	 * @param word
+	 * 			word to search for
+	 * @return number of locations the word was 
+	 *		   found in
+	 */
+	public int numLocations(String word) {
+		int count = 0;
+		for (Map.Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.entrySet()) {
+			if (entry.equals(word)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	// TODO numPositions(String word, String location)
+	
+	/**
+	 * 
+	 * @param word
+	 * @param location
+	 * @return
+	 */
+	public int numPositions(String word, String location) {
+		int positionCount = 0;
+		for (Map.Entry<String, TreeMap<String, TreeSet<Integer>>> entry : index.entrySet()) {
+			if (entry.equals(word) && entry.equals(location)) {
+				positionCount++;
+			}
+		}
+		return positionCount;
+	}
+	
+	/**
 	 * Returns whether the word is in the index.
 	 * 
 	 * @param word
@@ -49,37 +85,37 @@ public class InvertedIndex {
 	public boolean contains(String word) {
 		return index.containsKey(word);
 	}
-	
-//	public boolean contains(String word, String location) {
-//		return index.containsKey(word) && index.get(word).containsKey(location);
-//	}
-	
-	// TODO Add something like this for word, location, position
-	// TODO numLocations(String word)... numPositions(String word, String location)
-	
-	// TODO make it String file... not File file
+
 	/**
-	 * Helper method
-	 * Returns whether the word is in the file.
+	 * Returns whether the word is in the index at a 
+	 * specific location.
 	 * 
 	 * @param word
 	 * 				word to find
-	 * @param file
-	 * 				file to look through
-	 * @return true if the word is in the index,
-	 * otherwise false;
-	 *
-	 * @throws FileNotFoundException
+	 * @param location
+	 * 				location to find word in
+	 * @return true is the word is in the index at the
+	 * 		   location, otherwise false.
 	 */
-	public boolean contains(String word, File file) throws FileNotFoundException {
-		Scanner scanner = new Scanner(file);
-		while (scanner.hasNextLine()) {
-			String nextWord = scanner.next();
-			if (nextWord.equalsIgnoreCase(word)){
-				return true;
-			}
-		}
-		return false;
+	public boolean contains(String word, String location) {
+		return index.containsKey(word) && index.get(word).containsKey(location);
+	}
+	
+	/**
+	 * Returns whether the word is in the index at a
+	 * specific location and certain word position.
+	 * 
+	 * @param word
+	 * 				word to find
+	 * @param location
+	 * 				location to find word in
+	 * @param wordPosition
+	 * 				word position to find
+	 * @return true if the word is in the index at the
+	 * 		   location and word position, otherwise false.
+	 */
+	public boolean contains (String word, String location, int wordPosition) {
+		return index.containsKey(word) && index.get(word).containsKey(location) && index.get(word).containsValue(wordPosition);
 	}
 	
 	/**
