@@ -56,8 +56,6 @@ public class InvertedIndex {
 		return count;
 	}
 	
-	// TODO numPositions(String word, String location)
-	
 	/**
 	 * 
 	 * @param word
