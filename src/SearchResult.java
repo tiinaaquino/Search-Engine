@@ -85,10 +85,11 @@ public class SearchResult implements Comparable<SearchResult>{
 	}
 	
 	/**
+	 * Compares the given strings.
 	 * 
-	 * @param s
-	 * 		
-	 * @return
+	 * @param other
+	 * 			the SearchResult to compare to
+	 * @return an int value from the comparison
 	 * 		
 	 * @see String#compareTo(String)
 	 * @see Integer#compare(int, int)
