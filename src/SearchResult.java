@@ -42,7 +42,20 @@ public class SearchResult implements Comparable<SearchResult>{
 		this.position = position;
 		this.location = location;
 	}
-
+	
+	public SearchResult(String path, int frequency, int position) {
+		this.path = path;
+		this.frequency = frequency;
+		this.position = position;
+	}
+	
+	public SearchResult(int frequency, int position, String location) {
+		path = "";
+		this.frequency = frequency;
+		this.position = position;
+		this.location = location;
+	}
+	
 	/**
 	 * Get the frequency of the search result
 	 * 
