@@ -22,7 +22,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	private int position;
 	
 	/** Location of the query(s). */
-	private int location;
+	private String location;
 	
 	/**
 	 * Initializes a searchResult from the provided parameters.
@@ -36,13 +36,39 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @param location
 	 *            location of the query word(s)
 	 */
-	public SearchResult(String path, int frequency, int position, int location) {
+	public SearchResult(String path, int frequency, int position, String location) {
 		this.path = path;
 		this.frequency = frequency;
 		this.position = position;
 		this.location = location;
 	}
 
+	/**
+	 * Get the frequency of the search result
+	 * 
+	 * @return frequency
+	 */
+	public int getFrequency() {
+		return frequency;
+	}
+	
+	/**
+	 * Get the position of the search result
+	 * 
+	 * @return position
+	 */
+	public int getPosition() {
+		return position;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getLocation() {
+		return location;
+	}
+	
 	/**
 	 *  Updates the query with the given frequency and position.
 	 *  
