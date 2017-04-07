@@ -19,6 +19,7 @@ public class Driver
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 		String defaultValue = "index.json";
+//		SearchResult search = new SearchResult();
 		
 		System.out.println(Arrays.toString(args));
 		
