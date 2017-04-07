@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -175,6 +176,89 @@ public class InvertedIndex {
 	 */
 	public void asJSON(Path path) throws IOException {
 		JSONWriter.asNestedObject(index, path);
+	}
+	
+	/**
+	 * Performs a partial search on query words.
+	 * 
+	 * @param queryWords
+	 * 			words to search for
+	 * @return sorted list of search results
+	 */
+	public ArrayList<SearchResult> partialSearch(String queryWords) {
+		String location = "NULL";
+		int frequency = 0;
+		int position = Integer.MAX_VALUE;
+		HashMap<String, SearchResult> searchMap = new HashMap<>();
+		
+		for (String word : queryWords.split("\\s+")) {
+			frequency = 0;
+			
+			for (String w : index.tailMap(word, true).keySet()) {
+				
+				if (w.startsWith(word)) {
+					TreeMap<String, TreeSet<Integer>> value = index.get(word);
+					
+					for (String myLocation : value.keySet()) {
+						location = myLocation;
+						frequency = value.get(location).size();
+						position = index.get(w).get(location).first();
+						
+						if (!searchMap.containsKey(location)) {
+							searchMap.put(location, new SearchResult(frequency, position, location));
+						}
+						else {
+							searchMap.get(location).update(frequency, position);
+						}
+					}
+				}
+				
+				else {
+					break;
+				}
+			}
+		}
+		
+		ArrayList<SearchResult> partialSearchResults = new ArrayList<>();
+		partialSearchResults.addAll(searchMap.values());
+		Collections.sort(partialSearchResults);
+		return partialSearchResults;
+	}
+	
+	/**
+	 * Performs an exact search on query words.
+	 * 
+	 * @param queryWords
+	 * 			word(s) to search for
+	 * @return sorted list of search results
+	 */
+	public ArrayList<SearchResult> exactSearch(String queryWords) {
+		HashMap<String, SearchResult> searchMap = new HashMap<>();
+		for (String word : queryWords.split("\\s+")) {
+			word.toLowerCase().trim();
+//			ArrayList<SearchResult> searchResults = new ArrayList<>();
+			
+			if (index.containsKey(word)) {
+				TreeMap<String, TreeSet<Integer>> pathAndPositions = index.get(word);
+				
+				for (String path: pathAndPositions.keySet()) {
+					TreeSet<Integer> positions = pathAndPositions.get(path);
+					int frequency = positions.size();
+					int firstPosition = positions.first();
+					
+					if (searchMap.containsKey(path)) {
+						searchMap.get(path).update(frequency, firstPosition);
+					}
+					else {
+						searchMap.put(path, new SearchResult(path, frequency, firstPosition));
+					}
+				}
+			}
+		}
+		ArrayList<SearchResult> exactSearchResults = new ArrayList<SearchResult>();
+		exactSearchResults.addAll(searchMap.values());
+		Collections.sort(exactSearchResults);
+		return exactSearchResults;
 	}
 	
 	/**
