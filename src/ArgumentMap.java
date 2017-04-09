@@ -58,11 +58,11 @@ public class ArgumentMap {
 	public static boolean isFlag(String arg) {
 		if (arg != null) {
 			String temp = arg.trim();
-			if (temp.startsWith("-") == true && temp.length() > 1) {
+			if (temp.startsWith("-") == true) {
 				return true;
 			}
 		}
-		return false; 
+		return false;
 	}
 
 	/**
