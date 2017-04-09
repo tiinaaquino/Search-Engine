@@ -143,7 +143,7 @@ public class JSONWriter {
 	 *            path to write file
 	 * @throws IOException
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, BufferedWriter writer, int level) throws IOException {
+	private static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, BufferedWriter writer, int level) throws IOException {
 		int count = 0;
 		for (String s : elements.keySet()) {
 			writer.write(indent(level));
@@ -174,15 +174,16 @@ public class JSONWriter {
 	 *            path to write file
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unused")
 	public static void asDNestedObject(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path) throws IOException {
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			int i = 0;
-			writer.write("\n");
+			writer.write("{\n");
 			
 			for (String word: elements.keySet()) {
 				writer.write(indent(1) + quote(word) + ": {\n");
 				
-				for (@SuppressWarnings("unused") String s : elements.get(word).keySet()) {
+				for (String s : elements.get(word).keySet()) {
 					JSONWriter.asNestedObject(elements.get(word), writer, 2);
 					writer.write(indent(1) + "}");
 					while (i < elements.size()-1) {
