@@ -186,40 +186,31 @@ public class InvertedIndex {
 	 * @return sorted list of search results
 	 */
 	public ArrayList<SearchResult> partialSearch(String queryWords) {
-		String location = "NULL";
-		int frequency = 0;
-		int position = Integer.MAX_VALUE;
 		HashMap<String, SearchResult> searchMap = new HashMap<>();
 		
 		for (String word : queryWords.split("\\s+")) {
-			frequency = 0;
-			
-			for (String w : index.tailMap(word, true).keySet()) {
+			for (String w : index.tailMap(word).keySet()) {
 				
 				if (w.startsWith(word)) {
-					TreeMap<String, TreeSet<Integer>> value = index.get(word);
+					TreeMap<String, TreeSet<Integer>> values = index.get(word);
 					
-					for (String myLocation : value.keySet()) {
-						location = myLocation;
-						frequency = value.get(location).size();
-						position = index.get(w).get(location).first();
+					for (String path : values.keySet()) {
+						TreeSet<Integer> position = values.get(path);
+						int firstPosition = position.first();
+						int frequency = position.size();
 						
-						if (!searchMap.containsKey(location)) {
-							searchMap.put(location, new SearchResult(frequency, position, location));
+						if (!searchMap.containsKey(path)) {
+							searchMap.put(path, new SearchResult(path, frequency, firstPosition));
 						}
 						else {
-							searchMap.get(location).update(frequency, position);
+							searchMap.get(path).update(frequency, firstPosition);
 						}
 					}
-				}
-				
-				else {
-					break;
 				}
 			}
 		}
 		
-		ArrayList<SearchResult> partialSearchResults = new ArrayList<>();
+		ArrayList<SearchResult> partialSearchResults = new ArrayList<SearchResult>();
 		partialSearchResults.addAll(searchMap.values());
 		Collections.sort(partialSearchResults);
 		return partialSearchResults;
@@ -234,10 +225,8 @@ public class InvertedIndex {
 	 */
 	public ArrayList<SearchResult> exactSearch(String queryWords) {
 		HashMap<String, SearchResult> searchMap = new HashMap<>();
-		for (String word : queryWords.split("\\s+")) {
-			word.toLowerCase().trim();
-//			ArrayList<SearchResult> searchResults = new ArrayList<>();
-			
+		for (String word : queryWords.split(" ")) {
+			word.toLowerCase();			
 			if (index.containsKey(word)) {
 				TreeMap<String, TreeSet<Integer>> pathAndPositions = index.get(word);
 				
@@ -246,11 +235,11 @@ public class InvertedIndex {
 					int frequency = positions.size();
 					int firstPosition = positions.first();
 					
-					if (searchMap.containsKey(path)) {
-						searchMap.get(path).update(frequency, firstPosition);
+					if (!searchMap.containsKey(path)) {
+						searchMap.put(path, new SearchResult(path, frequency, firstPosition));
 					}
 					else {
-						searchMap.put(path, new SearchResult(path, frequency, firstPosition));
+						searchMap.get(path).update(frequency, firstPosition);
 					}
 				}
 			}

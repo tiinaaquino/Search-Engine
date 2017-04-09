@@ -33,27 +33,11 @@ public class SearchResult implements Comparable<SearchResult>{
 	 *            locations where the query word(s) are more frequent
 	 * @param position
 	 *            position of the query word(s)
-	 * @param location
-	 *            location of the query word(s)
 	 */
-	public SearchResult(String path, int frequency, int position, String location) {
-		this.path = path;
-		this.frequency = frequency;
-		this.position = position;
-		this.location = location;
-	}
-	
 	public SearchResult(String path, int frequency, int position) {
 		this.path = path;
 		this.frequency = frequency;
 		this.position = position;
-	}
-	
-	public SearchResult(int frequency, int position, String location) {
-		path = "";
-		this.frequency = frequency;
-		this.position = position;
-		this.location = location;
 	}
 	
 	/**
@@ -78,8 +62,8 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * 
 	 * @return
 	 */
-	public String getLocation() {
-		return location;
+	public String getPath() {
+		return path;
 	}
 	
 	/**

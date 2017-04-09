@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
@@ -206,6 +207,91 @@ public class JSONWriter {
 				}
 			}
 			writer.write("\n}");
+		}
+	}
+	
+	
+	public static void asNestedMap(String key, ArrayList<SearchResult> results, BufferedWriter writer) throws IOException {
+		writer.newLine();
+		writer.write(indent(1) + quote(key));
+		writer.write(": [");
+		
+		if (!results.isEmpty()) {
+			asResultsList(results, writer);
+		}
+		writer.newLine();
+		writer.write(indent(1) + "]");
+	}
+	
+	public static void asResultsList (ArrayList<SearchResult> searchResult, BufferedWriter writer) throws IOException {
+		SearchResult first = searchResult.get(0);
+		asResult(first, writer);
+		
+		for (SearchResult result : searchResult.subList(1, searchResult.size())) {
+			writer.write(",");
+			asResult(result, writer);
+		}
+	}
+	
+	public static void asResult(SearchResult searchResult, BufferedWriter writer) throws IOException {
+		if (searchResult.getPath() != "NULL") {
+			writer.newLine();
+			writer.write(indent(2) + "{");
+			
+			writer.newLine();
+			writer.write(indent(3) + quote("where") + ": ");
+			writer.write(quote(searchResult.getPath()) + ",");
+			
+			writer.newLine();
+			writer.write(indent(3) + quote("count") + ": ");
+			writer.write(searchResult.getFrequency() + ",");
+			
+			writer.newLine();
+			writer.write(indent(3) + quote("index") + ": " + searchResult.getPosition());
+			
+			writer.newLine();
+			writer.write(indent(2) + "}");
+		}
+	}
+	
+	public static void asSearchObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			writer.write("[\n");
+			int queryNum = elements.size();
+			int i = 0;
+			
+			for (String query : elements.keySet()) {
+				int j = 0;
+				writer.write(indent(1) + "{\n");
+				writer.write(indent(2) + quote("queries") + ": " + quote(query) + ",\n");
+				writer.write(indent(2) + quote("results") + ": [\n");
+				
+				for (SearchResult searchResult : elements.get(query)) {
+					writer.write(indent(3) + "{\n");
+					writer.write(indent(4) + quote("where") + ": " + quote(searchResult.getPath()) + ",\n");
+					writer.write(indent(4) + quote("count") + ": " + searchResult.getFrequency() + ", \n");
+					writer.write(indent(4) + quote("index") + ": " + searchResult.getPosition() + "\n");
+					writer.write(indent(3) + "}");
+					int count = elements.get(query).size();
+					
+					while(j < (count - 1)) {
+						writer.write(",");
+						j++;
+						break;
+					}
+					writer.newLine();
+				}
+				writer.write(indent(2) + "]\n");
+				writer.write(indent(1) + "}");
+				
+				while (i < (queryNum - 1)) {
+					writer.write(",");
+					i++;
+					break;
+				}
+				writer.newLine();
+			}
+			writer.write("]");
 		}
 	}
 }
