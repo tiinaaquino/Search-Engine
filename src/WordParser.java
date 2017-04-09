@@ -96,7 +96,7 @@ public class WordParser {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ArrayList<String> parseQuery(Path path) throws IOException
+	public static ArrayList<String> parse(Path path) throws IOException
 	{
 		ArrayList<String> list = new ArrayList<String>();
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);) {	
