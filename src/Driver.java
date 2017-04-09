@@ -21,37 +21,37 @@ public class Driver
 	 */
 	public static void main(String[] args)
 	{	
-		ArgumentMap map = new ArgumentMap(args);
+		ArgumentMap argMap = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 		TreeMap<String, ArrayList<SearchResult>> treeMap = new TreeMap<>();
 		
 		System.out.println(Arrays.toString(args));
 		
-		if (map.hasFlag("-path") && map.hasValue("-path")) {
+		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 			try {
-				InvertedIndexBuilder.traverse(Paths.get(map.getValue("-path")), index);
+				InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
 			}
 			catch (IOException e) {
-				System.out.println("Unable to build index from the path " + map.getString("-path"));
+				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
 			}
 		}
 		
-		if (map.hasFlag("-index")) {
-			String output = map.getString("-index", "index.json");
+		if (argMap.hasFlag("-index")) {
+			String output = argMap.getString("-index", "index.json");
 			try {
 				index.asJSON(Paths.get(output));
 			}
 			catch (IOException e) {
-				System.out.println("Unable to build index from " + map.getString("-index"));
+				System.out.println("Unable to build index from " + output);
 			}
 		}
 		
-		String results = map.getString("-results", "results.json");
-		if (map.hasFlag("-results")) {
-			if (map.hasFlag("-query") && map.hasValue("-query")) {
-				if (map.hasFlag("-exact")) {
+		String results = argMap.getString("-results", "results.json");
+		if (argMap.hasFlag("-results")) {
+			if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
+				if (argMap.hasFlag("-exact")) {
 					try {
-						ArrayList<String> list = QueryHelper.parse(Paths.get(map.getValue("-query")));
+						ArrayList<String> list = QueryHelper.parse(Paths.get(argMap.getValue("-query")));
 						Set<String> set = new HashSet<String>(list);
 						ArrayList<String> queryList = new ArrayList<String>(set);
 						Collections.sort(queryList);
@@ -67,7 +67,7 @@ public class Driver
 				}
 				else {
 					try {
-						ArrayList<String> list = (QueryHelper.parse(Paths.get(map.getValue("-query"))));
+						ArrayList<String> list = (QueryHelper.parse(Paths.get(argMap.getValue("-query"))));
 						Set<String> set = new HashSet<String>(list);
 						ArrayList<String> queryList = new ArrayList<String>(set);
 						Collections.sort(queryList);
@@ -93,7 +93,7 @@ public class Driver
 			}
 		}
 		
-		if (map.hasFlag("-results") && !map.hasValue("-results")) {
+		if (argMap.hasFlag("-results") && !argMap.hasValue("-results")) {
 			try {
 				index.asJSON(Paths.get(results));
 			}
@@ -101,7 +101,5 @@ public class Driver
 				System.out.println("No value for results.");
 			}
 		}
-		
-
 	}	
 }
