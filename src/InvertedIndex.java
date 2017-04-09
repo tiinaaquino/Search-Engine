@@ -142,11 +142,11 @@ public class InvertedIndex {
 	 */
 	public void add(String word, String path, int wordPosition) {
 		if (!index.containsKey(word)) {
-			index.put(word, new TreeMap<>());
+			index.put(word, new TreeMap<String, TreeSet<Integer>>());
 		}
 		
 		if (!index.get(word).containsKey(path)) {
-			index.get(word).put(path, new TreeSet<>());
+			index.get(word).put(path, new TreeSet<Integer>());
 		}
 		
 		index.get(word).get(path).add(wordPosition);
@@ -175,7 +175,7 @@ public class InvertedIndex {
 	 * @throws IOException
 	 */
 	public void asJSON(Path path) throws IOException {
-		JSONWriter.asNestedObject(index, path);
+		JSONWriter.asDNestedObject(index, path);
 	}
 	
 	/**
@@ -183,16 +183,17 @@ public class InvertedIndex {
 	 * 
 	 * @param queryWords
 	 * 			words to search for
-	 * @return sorted list of search results
+	 * @return sorted list of partial search results
 	 */
 	public ArrayList<SearchResult> partialSearch(String queryWords) {
 		HashMap<String, SearchResult> searchMap = new HashMap<>();
 		
 		for (String word : queryWords.split("\\s+")) {
+			
 			for (String w : index.tailMap(word).keySet()) {
 				
 				if (w.startsWith(word)) {
-					TreeMap<String, TreeSet<Integer>> values = index.get(word);
+					TreeMap<String, TreeSet<Integer>> values = index.get(w);
 					
 					for (String path : values.keySet()) {
 						TreeSet<Integer> position = values.get(path);
@@ -225,8 +226,9 @@ public class InvertedIndex {
 	 */
 	public ArrayList<SearchResult> exactSearch(String queryWords) {
 		HashMap<String, SearchResult> searchMap = new HashMap<>();
-		for (String word : queryWords.split(" ")) {
-			word.toLowerCase();			
+		
+		for (String word : queryWords.split(" ")) {			
+			
 			if (index.containsKey(word)) {
 				TreeMap<String, TreeSet<Integer>> pathAndPositions = index.get(word);
 				

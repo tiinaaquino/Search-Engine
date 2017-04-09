@@ -1,4 +1,11 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -80,5 +87,33 @@ public class WordParser {
 		TreeSet<String> words = new TreeSet<>();
 		Collections.addAll(words, parseWords(text));
 		return words;
+	}
+	
+	/**
+	 * Method that parses the query file by cleaning the text, sorting the individual query line, and storing it in a list.
+	 * @param path
+	 * 			path to input
+	 * @return
+	 * @throws IOException
+	 */
+	public static ArrayList<String> parseQuery(Path path) throws IOException
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);) {	
+			String line;
+			
+			while ((line = reader.readLine()) != null) {
+				line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
+				
+				if (line.contains(" ")) {
+					String[] words = WordParser.parseWords(line);
+					Arrays.sort(words);
+					line = Arrays.toString(words);
+					line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
+				}
+				list.add(line);
+			}
+		}		
+		return list;
 	}
 }

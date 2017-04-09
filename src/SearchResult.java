@@ -13,16 +13,13 @@ import java.nio.file.Path;
 public class SearchResult implements Comparable<SearchResult>{
 	
 	/** Path of the query(s). */
-	private final String path;
+	private String path;
 	
 	/** Frequency of the query(s). */
-	private int frequency;
+	private int frequency = 0;
 	
 	/** Position of the query(s). */
-	private int position;
-	
-	/** Location of the query(s). */
-	private String location;
+	private int firstPosition = 0;
 	
 	/**
 	 * Initializes a searchResult from the provided parameters.
@@ -34,10 +31,10 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @param position
 	 *            position of the query word(s)
 	 */
-	public SearchResult(String path, int frequency, int position) {
+	public SearchResult(String path, int frequency, int firstPosition) {
 		this.path = path;
 		this.frequency = frequency;
-		this.position = position;
+		this.firstPosition = firstPosition;
 	}
 	
 	/**
@@ -46,7 +43,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @return frequency
 	 */
 	public int getFrequency() {
-		return frequency;
+		return this.frequency;
 	}
 	
 	/**
@@ -55,7 +52,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @return position
 	 */
 	public int getPosition() {
-		return position;
+		return this.firstPosition;
 	}
 	
 	/**
@@ -63,7 +60,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @return
 	 */
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 	
 	/**
@@ -74,13 +71,14 @@ public class SearchResult implements Comparable<SearchResult>{
 	 * @param position
 	 * 			position to update
 	 */
-	public void update(int frequency, int position) {
-		this.frequency += frequency;
-		if (this.position > position) {
-			this.position = position;
+	public void update(int frequencyToUpdate, int positionToUpdate) {
+		if (positionToUpdate < firstPosition) {
+			firstPosition = positionToUpdate;
 		}
+		frequency += frequencyToUpdate;
 	}
 	
+	//TODO
 	/**
 	 * Compares the given strings.
 	 * 
@@ -94,10 +92,10 @@ public class SearchResult implements Comparable<SearchResult>{
 	@Override
 	public int compareTo(SearchResult other) {
 		if (this.frequency == other.frequency) {
-			if (this.position == other.position) {
+			if (this.firstPosition == other.firstPosition) {
 				return this.path.compareTo(other.path);
 			}
-			return Integer.compare(this.position, other.position);
+			return Integer.compare(this.firstPosition, other.firstPosition);
 		}
 		return Integer.compare(other.frequency, this.frequency);
 	}
@@ -107,7 +105,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	 */
 	@Override
 	public String toString() {
-		return ("\nwhere: " + location + "\ncount: " + frequency + "\nindex: " + position);
+		return ("Path: " + this.path + "Count: " + this.frequency + "Position: " + this.firstPosition);
 	}
  
 }

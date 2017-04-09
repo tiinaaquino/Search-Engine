@@ -67,7 +67,7 @@ public class Driver
 				}
 				else {
 					try {
-						ArrayList<String> list = QueryHelper.parse(Paths.get(map.getValue("-query")));
+						ArrayList<String> list = (QueryHelper.parse(Paths.get(map.getValue("-query"))));
 						Set<String> set = new HashSet<String>(list);
 						ArrayList<String> queryList = new ArrayList<String>(set);
 						Collections.sort(queryList);
@@ -89,7 +89,7 @@ public class Driver
 				index.asJSON(Paths.get("-results"));
 			}
 			catch (IOException e) {
-				
+				System.out.println("Error.");
 			}
 		}
 		
