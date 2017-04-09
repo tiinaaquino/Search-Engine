@@ -88,32 +88,4 @@ public class WordParser {
 		Collections.addAll(words, parseWords(text));
 		return words;
 	}
-	
-	/**
-	 * Method that parses the query file by cleaning the text, sorting the individual query line, and storing it in a list.
-	 * @param path
-	 * 			path to input
-	 * @return
-	 * @throws IOException
-	 */
-	public static ArrayList<String> parse(Path path) throws IOException
-	{
-		ArrayList<String> list = new ArrayList<String>();
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);) {	
-			String line;
-			
-			while ((line = reader.readLine()) != null) {
-				line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
-				
-				if (line.contains(" ")) {
-					String[] words = WordParser.parseWords(line);
-					Arrays.sort(words);
-					line = Arrays.toString(words);
-					line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
-				}
-				list.add(line);
-			}
-		}		
-		return list;
-	}
 }
