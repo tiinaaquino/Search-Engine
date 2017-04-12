@@ -46,44 +46,34 @@ public class Driver
 			}
 		}
 		
-		String results = argMap.getString("-results", "results.json");
 		if (argMap.hasFlag("-results")) {
+			
 			if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
-				if (argMap.hasFlag("-exact")) {
-					try {
-						ArrayList<String> list = QueryHelper.parse(Paths.get(argMap.getValue("-query")));
-						Set<String> set = new HashSet<String>(list);
-						ArrayList<String> queryList = new ArrayList<String>(set);
-						Collections.sort(queryList);
+				
+				try {
+					ArrayList<String> list = QueryHelper.parse(Paths.get(argMap.getValue("-query")));
+					Set<String> set = new HashSet<String>(list);
+					ArrayList<String> queryList = new ArrayList<String>(set);
+					Collections.sort(queryList);
+					
+					for (String query : queryList) {
 						
-						for (String query : queryList) {
+						if (argMap.hasFlag("-exact")) {
 							treeMap.put(query, index.exactSearch(query));
-						}
-						JSONWriter.asSearchObject(treeMap, Paths.get(results));
-					}
-					catch (IOException e) {
-						System.out.println("Exact search failed.");
-					}
-				}
-				else {
-					try {
-						ArrayList<String> list = (QueryHelper.parse(Paths.get(argMap.getValue("-query"))));
-						Set<String> set = new HashSet<String>(list);
-						ArrayList<String> queryList = new ArrayList<String>(set);
-						Collections.sort(queryList);
-						
-						for (String query : queryList) {
+						} 
+						else {			
 							if (!query.equals("")) {
 								treeMap.put(query, index.partialSearch(query));
 							}
-							JSONWriter.asSearchObject(treeMap, Paths.get(results));
 						}
-					}
-					catch (IOException e) {
-						System.out.println("Partial search failed.");
+					JSONWriter.asSearchObject(treeMap, Paths.get(argMap.getString("-results", "results.json")));
 					}
 				}
+				catch (IOException e) {
+					System.out.println("Search failed.");
+				}
 			}
+		}
 			
 			try {
 				index.asJSON(Paths.get("-results"));
@@ -91,11 +81,10 @@ public class Driver
 			catch (IOException e) {
 				System.out.println("Error.");
 			}
-		}
 		
 		if (argMap.hasFlag("-results") && !argMap.hasValue("-results")) {
 			try {
-				index.asJSON(Paths.get(results));
+				index.asJSON(Paths.get(argMap.getString("-results", "results.json")));
 			}
 			catch (IOException e) {
 				System.out.println("No value for results.");
