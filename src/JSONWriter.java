@@ -232,7 +232,7 @@ public class JSONWriter {
 						i++;
 						break;
 					}
-					writer.write("\n");
+					writer.write("\n");					
 				}
 				writer.write(indent(2) + "]\n");
 				writer.write(indent(1) + "}");
@@ -244,7 +244,6 @@ public class JSONWriter {
 				}
 				writer.write("\n");
 			}
-			
 			writer.write("]");
 		}
 	}
