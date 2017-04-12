@@ -40,7 +40,7 @@ public class SearchResult implements Comparable<SearchResult>{
 	/**
 	 * Get the frequency of the search result
 	 * 
-	 * @return frequency
+	 * @return frequency of the result
 	 */
 	public int getFrequency() {
 		return this.frequency;
@@ -49,15 +49,16 @@ public class SearchResult implements Comparable<SearchResult>{
 	/**
 	 * Get the position of the search result
 	 * 
-	 * @return position
+	 * @return position of the result
 	 */
 	public int getPosition() {
 		return this.firstPosition;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 *  Get the path of the search result
+	 *  
+	 * @return path of the result
 	 */
 	public String getPath() {
 		return this.path;
@@ -78,7 +79,6 @@ public class SearchResult implements Comparable<SearchResult>{
 		frequency += frequencyToUpdate;
 	}
 	
-	//TODO
 	/**
 	 * Compares the given strings.
 	 * 
