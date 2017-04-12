@@ -179,45 +179,6 @@ public class InvertedIndex {
 	}
 	
 	/**
-	 * Performs a partial search on query words.
-	 * 
-	 * @param queryWords
-	 * 			words to search for
-	 * @return sorted list of partial search results
-	 */
-	public ArrayList<SearchResult> partialSearch(String queryWords) {
-		HashMap<String, SearchResult> searchMap = new HashMap<>();
-		
-		for (String word : queryWords.split("\\s+")) {
-			
-			for (String w : index.tailMap(word).keySet()) {
-				
-				if (w.startsWith(word)) {
-					TreeMap<String, TreeSet<Integer>> values = index.get(w);
-					
-					for (String path : values.keySet()) {
-						TreeSet<Integer> position = values.get(path);
-						int firstPosition = position.first();
-						int frequency = position.size();
-						
-						if (!searchMap.containsKey(path)) {
-							searchMap.put(path, new SearchResult(path, frequency, firstPosition));
-						}
-						else {
-							searchMap.get(path).update(frequency, firstPosition);
-						}
-					}
-				}
-			}
-		}
-		
-		ArrayList<SearchResult> partialSearchResults = new ArrayList<SearchResult>();
-		partialSearchResults.addAll(searchMap.values());
-		Collections.sort(partialSearchResults);
-		return partialSearchResults;
-	}
-	
-	/**
 	 * Performs an exact search on query words.
 	 * 
 	 * @param queryWords
@@ -250,6 +211,44 @@ public class InvertedIndex {
 		exactSearchResults.addAll(searchMap.values());
 		Collections.sort(exactSearchResults);
 		return exactSearchResults;
+	}
+	
+	/**
+	 * Performs a partial search on query words.
+	 * 
+	 * @param queryWords
+	 * 			words to search for
+	 * @return sorted list of partial search results
+	 */
+	public ArrayList<SearchResult> partialSearch(String queryWords) {
+		HashMap<String, SearchResult> searchMap = new HashMap<>();
+		
+		for (String word : queryWords.split("\\s+")) {
+			
+			for (String w : index.tailMap(word).keySet()) {
+
+				if (w.startsWith(word)) {
+					TreeMap<String, TreeSet<Integer>> values = index.get(w);
+					
+					for (String path : values.keySet()) {
+						TreeSet<Integer> position = values.get(path);
+						int firstPosition = position.first();
+						int frequency = position.size();
+						
+						if (!searchMap.containsKey(path)) {
+							searchMap.put(path, new SearchResult(path, frequency, firstPosition));
+						}
+						else {
+							searchMap.get(path).update(frequency, firstPosition);
+						}
+					}
+				}
+			}
+		}
+		ArrayList<SearchResult> partialSearchResults = new ArrayList<SearchResult>();
+		partialSearchResults.addAll(searchMap.values());
+		Collections.sort(partialSearchResults);
+		return partialSearchResults;
 	}
 	
 	/**
