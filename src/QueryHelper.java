@@ -11,10 +11,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+/**
+ * This class is responsible for parsing, cleaning,
+ * and storing queries.
+ */
+
 public class QueryHelper {
 	
+	/**
+	 * Stores the query in a map where the key is the path.
+	 */
 	private final HashMap<String, ArrayList<SearchResult>> result;
 	
+	/**
+	 * Initializes an empty result map.
+	 */
 	public QueryHelper() {
 		result = new LinkedHashMap<>();
 	}
