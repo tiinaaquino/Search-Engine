@@ -69,8 +69,8 @@ public class Driver
 							}
 						}
 						
-					JSONWriter.asSearchObject(treeMap, Paths.get(argMap.getString("-results", "results.json"))); // TODO Put this in a separate if block, and take out of a for loop
 					}
+					JSONWriter.asSearchObject(treeMap, Paths.get(argMap.getString("-results", "results.json")));
 				}
 				catch (IOException e) {
 					System.out.println("Search failed.");
