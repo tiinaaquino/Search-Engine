@@ -21,14 +21,39 @@ public class QueryHelper {
 	/**
 	 * Stores the query in a map where the key is the path.
 	 */
-	private final HashMap<String, ArrayList<SearchResult>> result;
+	private final HashMap<String, ArrayList<SearchResult>> result; // TODO Convert to TreeMap (key: cleaned line)
+//	private final InvertedIndex index;
 	
 	/**
 	 * Initializes an empty result map.
 	 */
-	public QueryHelper() {
+	public QueryHelper() { // TODO QueryHelper(InvertedIndex index)
 		result = new LinkedHashMap<>();
 	}
+	
+	/* TODO
+	public void parse(Path path, boolean exact) throws IOException {
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] words = WordParser.parseWords(line);
+				
+				if (words.length == 0) continue;
+				
+				Arrays.sort(words)
+				line = String.join(" ", words);
+				
+				if (exact) {
+					results.put(line, index.exactSearch(words));
+				}
+				else {
+					(partial search)
+				}
+			}
+		}
+
+	}	
+	*/
 	
 	/**
 	 * Parses the query file, cleans the texts, sorts each line,
@@ -56,6 +81,8 @@ public class QueryHelper {
 		}
 		return list;
 	}
+	
+	// TODO Add a toJSON() method to output the "results" object
 	
 	@Override
 	public String toString() {

@@ -10,10 +10,12 @@ import java.nio.file.Path;
  * information.
  */
 
-public class SearchResult implements Comparable<SearchResult>{
+public class SearchResult implements Comparable<SearchResult> {
 	
 	/** Path of the query(s). */
 	private String path;
+	
+	// TODO Remove the initialization (for members, this belongs in the constructor)
 	
 	/** Frequency of the query(s). */
 	private int frequency = 0;
