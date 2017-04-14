@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
 
+// TODO Address warnings
+
 /**
  * Parses command-line arguments into the index.
  */
@@ -48,7 +50,7 @@ public class Driver
 		
 		if (argMap.hasFlag("-results")) {
 			
-			if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
+			if (argMap.hasFlag("-query") && argMap.hasValue("-query")) { // TODO This should happen even if you do not output the results to file
 				
 				try {
 					ArrayList<String> list = QueryHelper.parse(Paths.get(argMap.getValue("-query")));
@@ -66,7 +68,8 @@ public class Driver
 								treeMap.put(query, index.partialSearch(query));
 							}
 						}
-					JSONWriter.asSearchObject(treeMap, Paths.get(argMap.getString("-results", "results.json")));
+						
+					JSONWriter.asSearchObject(treeMap, Paths.get(argMap.getString("-results", "results.json"))); // TODO Put this in a separate if block, and take out of a for loop
 					}
 				}
 				catch (IOException e) {

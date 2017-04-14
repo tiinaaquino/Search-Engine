@@ -140,7 +140,7 @@ public class InvertedIndex {
 	 * @param wordPosition
 	 * 				word position to store
 	 */
-	public void add(String word, String path, int wordPosition) {
+	public void add(String word, String path, int wordPosition) { // TODO Project 3: Change this to a private void addHelper(...)
 		if (!index.containsKey(word)) {
 			index.put(word, new TreeMap<String, TreeSet<Integer>>());
 		}
@@ -162,10 +162,17 @@ public class InvertedIndex {
 	public void addAll(String[] words, Path path) {
 		int position = 1;
 		for (String i : words) {
-			add(i, path.toString(), position);
+			add(i, path.toString(), position); // TODO Call addHelper() not add()
 			position++;
 		}
 	}
+	
+	/* 
+	TODO Project 3:
+	public void add(String word, String path, int wordPosition) { 
+		call addHelper()
+		}
+	*/
 	
 	/**
 	 * Calls "asNestedOject" of the JSONWriter class to convert object 
@@ -185,10 +192,11 @@ public class InvertedIndex {
 	 * 			word(s) to search for
 	 * @return sorted list of search results
 	 */
-	public ArrayList<SearchResult> exactSearch(String queryWords) {
+	public ArrayList<SearchResult> exactSearch(String queryWords) { // TODO String[] queryWords
 		HashMap<String, SearchResult> searchMap = new HashMap<>();
+		// TODO ArrayList<SearchResult> exactSearchResults = new ArrayList<SearchResult>(); (move this here)
 		
-		for (String word : queryWords.split(" ")) {			
+		for (String word : queryWords.split(" ")) {
 			
 			if (index.containsKey(word)) {
 				TreeMap<String, TreeSet<Integer>> pathAndPositions = index.get(word);
@@ -200,6 +208,7 @@ public class InvertedIndex {
 					
 					if (!searchMap.containsKey(path)) {
 						searchMap.put(path, new SearchResult(path, frequency, firstPosition));
+						// TODO exactSearchResults(searchMap.get(path));
 					}
 					else {
 						searchMap.get(path).update(frequency, firstPosition);
@@ -207,8 +216,9 @@ public class InvertedIndex {
 				}
 			}
 		}
-		ArrayList<SearchResult> exactSearchResults = new ArrayList<SearchResult>();
-		exactSearchResults.addAll(searchMap.values());
+		
+		ArrayList<SearchResult> exactSearchResults = new ArrayList<SearchResult>(); // TODO MOve this to top
+		exactSearchResults.addAll(searchMap.values()); // TODO Remove
 		Collections.sort(exactSearchResults);
 		return exactSearchResults;
 	}
@@ -228,6 +238,9 @@ public class InvertedIndex {
 			for (String w : index.tailMap(word).keySet()) {
 
 				if (w.startsWith(word)) {
+					
+					// TODO Make a search helper method that you can call in both search methods
+					// TODO private void searchHelper(String key, HashMap<String, SearchResult> searchMap, ArrayList<SearchResult> partialSearchResults);
 					TreeMap<String, TreeSet<Integer>> values = index.get(w);
 					
 					for (String path : values.keySet()) {
@@ -243,6 +256,7 @@ public class InvertedIndex {
 						}
 					}
 				}
+				// TODO else break
 			}
 		}
 		ArrayList<SearchResult> partialSearchResults = new ArrayList<SearchResult>();
