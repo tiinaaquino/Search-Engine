@@ -1,15 +1,13 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 /**
  * This class is responsible for parsing, cleaning,
@@ -19,16 +17,16 @@ import java.util.LinkedHashMap;
 public class QueryHelper {
 	
 	/**
-	 * Stores the query in a map where the key is the path.
+	 * Stores the query in a map where the key is the cleaned line.
 	 */
-	private final HashMap<String, ArrayList<SearchResult>> result; // TODO Convert to TreeMap (key: cleaned line)
+	private final TreeMap<String, ArrayList<SearchResult>> result;
 //	private final InvertedIndex index;
 	
 	/**
 	 * Initializes an empty result map.
 	 */
 	public QueryHelper() { // TODO QueryHelper(InvertedIndex index)
-		result = new LinkedHashMap<>();
+		result = new TreeMap<>();
 	}
 	
 	/* TODO
