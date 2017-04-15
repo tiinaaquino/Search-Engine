@@ -1,5 +1,3 @@
-import java.io.File; 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -7,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -140,7 +137,7 @@ public class InvertedIndex {
 	 * @param wordPosition
 	 * 				word position to store
 	 */
-	public void add(String word, String path, int wordPosition) { // TODO Project 3: Change this to a private void addHelper(...)
+	private void addHelper(String word, String path, int wordPosition) {
 		if (!index.containsKey(word)) {
 			index.put(word, new TreeMap<String, TreeSet<Integer>>());
 		}
@@ -153,7 +150,7 @@ public class InvertedIndex {
 	}
 	
 	/**
-	 * Adds array of words all at once, implementing add method
+	 * Adds array of words all at once, implementing addHelper method
 	 * 
 	 * @param words
 	 * 				array of words to add
@@ -162,17 +159,25 @@ public class InvertedIndex {
 	public void addAll(String[] words, Path path) {
 		int position = 1;
 		for (String i : words) {
-			add(i, path.toString(), position); // TODO Call addHelper() not add()
+			addHelper(i, path.toString(), position);
 			position++;
 		}
 	}
 	
-	/* 
-	TODO Project 3:
+	/**
+	 * Stores the word, its path, and word position
+	 * to the index, implements addHelper method
+	 * 
+	 * @param word
+	 * 				word to store
+	 * @param path
+	 * 				path to store
+	 * @param wordPosition
+	 * 				word position to store
+	 */
 	public void add(String word, String path, int wordPosition) { 
-		call addHelper()
+		addHelper(word, path, wordPosition);
 		}
-	*/
 	
 	/**
 	 * Calls "asNestedOject" of the JSONWriter class to convert object 
@@ -213,7 +218,7 @@ public class InvertedIndex {
 					else {
 						searchMap.get(path).update(frequency, firstPosition);
 					}
-				}
+				} 
 			}
 		}
 		
@@ -256,7 +261,10 @@ public class InvertedIndex {
 						}
 					}
 				}
-				// TODO else break
+				
+				else {
+					break;
+				}
 			}
 		}
 		ArrayList<SearchResult> partialSearchResults = new ArrayList<SearchResult>();
