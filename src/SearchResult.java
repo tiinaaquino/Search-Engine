@@ -8,14 +8,12 @@ public class SearchResult implements Comparable<SearchResult> {
 	
 	/** Path of the query(s). */
 	private String path;
-	
-	// TODO Remove the initialization (for members, this belongs in the constructor)
-	
+		
 	/** Frequency of the query(s). */
-	private int frequency = 0;
+	private int frequency;
 	
 	/** Position of the query(s). */
-	private int firstPosition = 0;
+	private int firstPosition;
 	
 	/**
 	 * Initializes a searchResult from the provided parameters.
