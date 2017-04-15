@@ -1,9 +1,3 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.nio.file.Path;
 
 /**
  * This class is responsible for storing basic search
