@@ -218,7 +218,7 @@ public class InvertedIndex {
 					else {
 						searchMap.get(path).update(frequency, firstPosition);
 					}
-				} 
+				}
 			}
 		}
 		
