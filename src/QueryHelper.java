@@ -18,38 +18,15 @@ public class QueryHelper {
 	 * Stores the query in a map where the key is the cleaned line.
 	 */
 	private final TreeMap<String, ArrayList<SearchResult>> result;
-//	private final InvertedIndex index;
+	private final InvertedIndex index;
 	
 	/**
 	 * Initializes an empty result map.
 	 */
-	public QueryHelper() { // TODO QueryHelper(InvertedIndex index)
+	public QueryHelper(InvertedIndex index) {
 		result = new TreeMap<>();
+		this.index = index;
 	}
-	
-	/* TODO
-	public void parse(Path path, boolean exact) throws IOException {
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				String[] words = WordParser.parseWords(line);
-				
-				if (words.length == 0) continue;
-				
-				Arrays.sort(words)
-				line = String.join(" ", words);
-				
-				if (exact) {
-					results.put(line, index.exactSearch(words));
-				}
-				else {
-					(partial search)
-				}
-			}
-		}
-
-	}	
-	*/
 	
 	/**
 	 * Parses the query file, cleans the texts, sorts each line,
@@ -60,25 +37,35 @@ public class QueryHelper {
 	 * @return sorted list of queries
 	 * @throws IOException
 	 */
-	public static ArrayList<String> parse(Path path) throws IOException {
-		ArrayList<String> list = new ArrayList<String>();
+	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
+			
 			while ((line = reader.readLine()) != null) {
-				line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
-				if (line.contains(" ")) {
-					String[] words = WordParser.parseWords(line);
-					Arrays.sort(words);
-					line = Arrays.toString(words);
-					line = WordParser.clean(line).replaceAll("\\s{2,}", " ").trim();
+				String[] words = WordParser.parseWords(line);
+				
+				if (words.length == 0) {
+					continue;
 				}
-				list.add(line);
+				
+				Arrays.sort(words);
+				line = String.join(" ", words);
+				ArrayList<SearchResult> list = exact ? index.exactSearch(words) : index.partialSearch(words);
+				result.put(line, list);
 			}
 		}
-		return list;
 	}
-	
-	// TODO Add a toJSON() method to output the "results" object
+		
+	/**
+	 * writes object to JSON format
+	 * 
+	 * @param path
+	 * 			path to input
+	 * @throws IOException
+	 */
+	public void toJSON(Path path) throws IOException {
+		JSONWriter.asSearchObject(result, path);
+	}
 	
 	@Override
 	public String toString() {
