@@ -178,7 +178,7 @@ public class InvertedIndex {
 	 */
 	public void add(String word, String path, int wordPosition) { 
 		addHelper(word, path, wordPosition);
-		}
+	}
 	
 	/**
 	 * Calls "asNestedOject" of the JSONWriter class to convert object 
@@ -207,7 +207,7 @@ public class InvertedIndex {
 			if (index.containsKey(word)) {
 				searchHelper(word, searchMap, exactSearchResults);
 			}
-		}		
+		}
 		Collections.sort(exactSearchResults);
 		return exactSearchResults;
 	}
@@ -230,7 +230,6 @@ public class InvertedIndex {
 				if (word.startsWith(prefix)) {
 					searchHelper(word, searchMap, partialSearchResults);
 				}
-				
 				else {
 					break;
 				}
