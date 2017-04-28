@@ -7,7 +7,7 @@
 public class SearchResult implements Comparable<SearchResult> {
 	
 	/** Path of the query(s). */
-	private String path; // TODO Make final
+	private final String path;
 		
 	/** Frequency of the query(s). */
 	private int frequency;
