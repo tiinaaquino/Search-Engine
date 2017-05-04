@@ -267,10 +267,6 @@ public class InvertedIndex {
 		}
 	}
 	
-	public void merge(TreeMap<String, TreeMap<String, TreeSet<Integer>>> local) {
-		index.putAll(local);
-	}
-	
 	/**
 	 * Returns the index as a string.
 	 */
