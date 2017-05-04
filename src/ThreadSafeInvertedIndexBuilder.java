@@ -7,8 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-//TODO Do I have to make increase/decrease pending variable for both this & work queue class?
-
 public class ThreadSafeInvertedIndexBuilder {
 	
 	private static final Logger logger = LogManager.getLogger();
