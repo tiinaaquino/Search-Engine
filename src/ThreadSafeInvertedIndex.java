@@ -1,15 +1,12 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class ThreadSafeInvertedIndex extends InvertedIndex{
 	
 	
 	//TODO comments
-	private ReadWriteLock lock;
-//	private static final Logger logger = LogManager.getLogger();
+	private final ReadWriteLock lock;
 
 	
 	public ThreadSafeInvertedIndex() {
@@ -27,7 +24,11 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		lock.lockReadWrite();
 		
 		try {
-			super.addAll(words, path);
+			int position = 1;
+			for (String i : words) {
+				super.add(i, path.toString(), position);
+				position++;
+			}
 		}
 		finally {
 			lock.unlockReadWrite();

@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class ThreadSafeQueryHelper {
 	
 	/**
@@ -28,7 +25,7 @@ public class ThreadSafeQueryHelper {
 		this.index = index;
 	}
 	
-	public synchronized void parse(Path path, boolean exact) throws IOException {
+	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			
