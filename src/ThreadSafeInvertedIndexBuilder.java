@@ -55,26 +55,6 @@ public class ThreadSafeInvertedIndexBuilder {
 		workers.finish();
 	}
 	
-	/**
-	 * Reads through the file, cleans HTML tags, parses the words then
-	 * adds them to the index.
-	 * 
-	 * @param path
-	 * 				path to add to the index
-	 * @param index
-	 * 				data structure to add in the words
-	 * 				from the path
-	 * @throws IOException
-	 */
-	public static void buildIndex(Path path, ThreadSafeInvertedIndex index) throws IOException {
-		List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-		String html = String.join(" ", lines);
-		String cleanedWords = HTMLCleaner.stripHTML(html);
-		String[] words = WordParser.parseWords(cleanedWords);
-		
-		index.addAll(words, path);
-	}
-	
 	private class FileWorker implements Runnable {
 		private Path path;
 		private ThreadSafeInvertedIndex index;
@@ -87,7 +67,7 @@ public class ThreadSafeInvertedIndexBuilder {
 		@Override
 		public void run() {
 			try {
-				buildIndex(path, index);
+				InvertedIndexBuilder.buildIndex(path, index);
 			}
 			catch (IOException e) {
 				logger.warn("Unable to parse {}");
