@@ -16,6 +16,52 @@ public class Driver
 	 */
 	public static void main(String[] args)
 	{	
+		/*
+		ArgumentMap argMap = new ArgumentMap(args);
+
+		InvertedIndex index = null;
+		QueryHelperInterface query = null;
+
+		int threads;
+
+		if (-threads) {
+			ThreadSafeInvertedIndex threadedIndex = new ThreadSafeInvertedIndex();
+			index = threadedIndex;
+			threads = ????;
+			query = new ThreadSafeQueryHelper(threadedIndex, threads);
+		}
+		else {
+			index = new InvertedIndex();
+			query = QueryHelper(index);
+		}
+		
+		if (-path) {
+
+			if (threads > 0) {
+				ThreadSafeInvertedIndexBuilder builder = ...
+			}
+			else {
+				InvertedIndexBuilder....
+			}
+		}
+		
+		if(-query) {
+			query.parse(...);
+		}
+
+		if (-index) {
+			index.toJSON(...);
+		}
+
+		if (-results) {
+			query.toJSON(...);
+		}
+		 */
+		
+		
+		
+		
+		
 		ArgumentMap argMap = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 		QueryHelper query = new QueryHelper(index);

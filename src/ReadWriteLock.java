@@ -68,7 +68,7 @@ public class ReadWriteLock {
 	 */
 	public synchronized void unlockReadWrite() {
 		writers--;
-		if (writers <= 0) {
+		if (writers <= 0) { // TODO Could remove this, writers will only ever be 0 or 1
 			this.notifyAll();
 		}
 	}

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+// TODO Use @Override, but do not need to Javadoc overridden methods
+
 public class ThreadSafeInvertedIndex extends InvertedIndex{
 	
 	
@@ -14,7 +16,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		lock = new ReadWriteLock();
 	}
 	
-
+	// TODO Remove the synchronized, but still need to use the readwrite lock
 	public synchronized void add(String word, String path, int wordPosition) {
 			super.add(word, path, wordPosition);
 	}
@@ -24,6 +26,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		lock.lockReadWrite();
 		
 		try {
+			// TODO super.addAll(...);
 			int position = 1;
 			for (String i : words) {
 				super.add(i, path.toString(), position);
@@ -67,7 +70,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 	 * @throws IOException
 	 */
 	public void asJSON(Path path) throws IOException {
-		lock.lockReadWrite();
+		lock.lockReadWrite(); // TODO Lock for read
 		
 		try {
 			super.asJSON(path);
@@ -77,5 +80,6 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		}
 	}
 	
+	// TODO Do have to override and lock numWords, etc. contains(), toString, copy methods.
 	
 }

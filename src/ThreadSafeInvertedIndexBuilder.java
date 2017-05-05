@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class ThreadSafeInvertedIndexBuilder {
 	
 	private static final Logger logger = LogManager.getLogger();
-	private final WorkQueue workers;
+	private final WorkQueue workers;  // TODO store the number of threads
 
 	
 	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, int numThreads) {
@@ -18,8 +18,17 @@ public class ThreadSafeInvertedIndexBuilder {
 		workers = new WorkQueue(numThreads);
 	}
 	
+	/* TODO
+	public void traverse(Path path) {
+		WorkQueue queue = new WorkQueue(threads);
+		
+		traverseHelper(path, queue);
+		queue.finish();
+		queue.shutdown();
+	}
+	*/
 
-
+	// TODO Make a private traverseHelper(Path path, WorkQueue queue)
 	/**
 	 * Traverses the directory, if the file ends in "HTML" buildIndex
 	 * method is called
@@ -36,14 +45,14 @@ public class ThreadSafeInvertedIndexBuilder {
 			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 				
 				for (Path extension : listing) {
-					traverse(extension, index);
+					traverse(extension, index); // TODO Call traverseHelper
 				}
 			}
 		}
 		else if (path.toString().toLowerCase().endsWith("htm") || path.toString().toLowerCase().endsWith("html")) {
 			workers.execute(new FileWorker(path, index));
 		}
-		workers.finish();
+		workers.finish(); // TODO Remove
 	}
 	
 	private class FileWorker implements Runnable {
