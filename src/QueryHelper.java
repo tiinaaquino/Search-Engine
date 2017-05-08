@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+// TODO Create a QueryHelperInterface and implement it in both places
+
 /**
  * This class is responsible for parsing, cleaning,
  * and storing queries.

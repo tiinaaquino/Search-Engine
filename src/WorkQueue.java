@@ -104,7 +104,7 @@ public class WorkQueue {
 		
 	}
 
-	
+	// TODO make private, javadoc
 	public void increasePending() {
 		synchronized (queue) {
 			pending++;
@@ -112,6 +112,7 @@ public class WorkQueue {
 		}
 	}
 	
+	// TODO make private, javadoc
 	public void decreasePending() {
 		synchronized (queue) {
 			pending--;
