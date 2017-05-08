@@ -54,7 +54,6 @@ public class WorkQueue {
 		pending = 0;
 		shutdown = false;
 
-		// start the threads so they are waiting in the background
 		for (int i = 0; i < threads; i++) {
 			workers[i] = new PoolWorker();
 			workers[i].start();
@@ -80,17 +79,6 @@ public class WorkQueue {
 	 * Waits for all pending work to be finished.
 	 */
 	public void finish() {
-		/*
-		 * (1) Add pending variable and initialize properly.
-		 * (2) Increment pending variable (safely) where appropriate.
-		 * (3) Decrement pending variable (safely) where appropriate.
-		 * (4) Wait until all pending work is complete in finish() method.
-		 * 
-		 * Hint: Use the same lock for synchronization that is already being
-		 * used in this class. This helps prevent deadlock, but comes with
-		 * an efficiency cost.
-		 */
-		
 		try {
 			synchronized (queue) {
 				while (pending > 0) {
@@ -104,16 +92,20 @@ public class WorkQueue {
 		
 	}
 
-	// TODO make private, javadoc
-	public void increasePending() {
+	/**
+	 * Increments pending variable.
+	 */
+	private void increasePending() {
 		synchronized (queue) {
 			pending++;
 			logger.debug("Pending is now {}", pending);
 		}
 	}
 	
-	// TODO make private, javadoc
-	public void decreasePending() {
+	/**
+	 * Decrements pending variable.
+	 */
+	private void decreasePending() {
 		synchronized (queue) {
 			pending--;
 			logger.debug("Pending is now {}", pending);
@@ -129,7 +121,6 @@ public class WorkQueue {
 	 * but threads in-progress will not be interrupted.
 	 */
 	public void shutdown() {
-		// safe to do unsynchronized due to volatile keyword
 		shutdown = true;
 
 		synchronized (queue) {
@@ -170,9 +161,6 @@ public class WorkQueue {
 						}
 					}
 
-					// exit while for one of two reasons:
-					// (a) queue has work, or (b) shutdown has been called
-
 					if (shutdown) {
 						break;
 					}
@@ -185,7 +173,6 @@ public class WorkQueue {
 					r.run();
 				}
 				catch (RuntimeException ex) {
-					// catch runtime exceptions to avoid leaking threads
 					System.err.println("Warning: Work queue encountered an " + "exception while running.");
 				}
 				finally {
