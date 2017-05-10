@@ -69,6 +69,9 @@ public class ThreadSafeQueryHelper implements QueryInterface{
 		}
 	}
 	
+	/**
+	 * Inner class to help parse
+	 */
 	private class LineWorker implements Runnable {
 		private String line;
 		private boolean exact;

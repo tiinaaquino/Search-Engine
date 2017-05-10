@@ -1,6 +1,5 @@
-import java.io.IOException;
+import java.io.IOException; 
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * Parses command-line arguments into the index.
@@ -39,8 +38,6 @@ public class Driver
 		WorkQueue worker = new WorkQueue(threads);
 		ThreadSafeInvertedIndexBuilder builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);	
 		QueryInterface threadedQuery = new ThreadSafeQueryHelper(threadedIndex, worker);
-
-		System.out.println(Arrays.toString(args));
 		
 		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 			if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
@@ -81,7 +78,6 @@ public class Driver
 				}
 			}
 		}
-
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
 			if (argMap.hasFlag("-threads") && argMap.hasValue("-threads") && argMap.getValue("-threads") != null) {
