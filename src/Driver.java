@@ -15,6 +15,54 @@ public class Driver
 	 */
 	public static void main(String[] args)
 	{	
+		/*
+		ArgumentMap argMap = new ArgumentMap(args);
+		InvertedIndex index = null;
+		ThreadSafeInvertedIndexBuilder builder = null;
+		QueryInterface query = null;
+		WorkQueue worker = null;
+		
+		if (-threads) {
+			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
+			
+			worker = new WorkQueue(...);
+			builder = new ThreadSafeInvertedIndexBuilder(threadSafe, worker);
+			query = new ThreadSafeQueryHelper(threadSafe, worker); 
+		
+			index = threadSafe;
+		}
+		else {
+			index = new InvertedIndex();
+			query = new QueryHelper(index);
+		}
+		
+		if (-path) {
+		
+			if (builder != null) {
+				use your multithreaded builder
+			}
+			else {
+				use the single threaded
+			}
+		}		
+		
+		if (-query) {
+			query....
+		}
+		
+		if (-index) {
+			index.asJSON(...);
+		}
+		
+		if (-results) {
+			query.asJSON(...);
+		}
+		
+		if (worker != null) {
+			worker.shutdown();
+		}
+		*/
+		
 		ArgumentMap argMap = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
 		String results = argMap.getString("-results", "results.json");
