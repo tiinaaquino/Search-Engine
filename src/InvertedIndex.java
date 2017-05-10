@@ -180,6 +180,21 @@ public class InvertedIndex {
 		addHelper(word, path, wordPosition);
 	}
 	
+	/* TODO Implement this and override in your thread-safe version
+	public void addAll(InvertedIndex other) {
+		for (String word : other.index.keySet()) {
+			if (this.index.containsKey(word) == false) {
+				this.index.put(word, other.index.get(word));
+			}
+			else {
+				loop through every path in other
+					if that path does not exist in this, put() of the path and position set from other
+					else, use the set.addAll method to combine the position sets of this.index and other.index
+			}
+		}
+	}
+	*/
+	
 	/**
 	 * Calls "asNestedOject" of the JSONWriter class to convert object 
 	 * to JSON object.

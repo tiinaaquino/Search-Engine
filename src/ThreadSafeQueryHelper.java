@@ -47,7 +47,7 @@ public class ThreadSafeQueryHelper implements QueryInterface{
 		this.index = index;
 	}
 	
-	
+	// TODO @Override
 	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
@@ -59,6 +59,7 @@ public class ThreadSafeQueryHelper implements QueryInterface{
 		}
 	}
 	
+	// TODO @Override
 	public void toJSON(Path path) throws IOException {
 		lock.lockReadOnly();
 		try {

@@ -77,4 +77,5 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		}
 	}
 	
+	// TODO Override all the reads (toString, copy, contains, num, etc.)
 }
