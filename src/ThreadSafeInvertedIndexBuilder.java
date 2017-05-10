@@ -6,29 +6,27 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+/**
+ * Builds the index and traverses through a directory.
+ *
+ */
 public class ThreadSafeInvertedIndexBuilder {
 	
 	private static final Logger logger = LogManager.getLogger();
-	private final WorkQueue workers;  // TODO store the number of threads
+	private final WorkQueue workers;
 
-	
-	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, int numThreads) {
+	/**
+	 * Initializes the thread safe inverted index.
+	 * @param index
+	 * 				thread safe index to build
+	 * @param workers
+	 * 				work queue object
+	 */
+	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, WorkQueue workers) {
 		super();
-		workers = new WorkQueue(numThreads);
+		this.workers = workers;
 	}
 	
-	/* TODO
-	public void traverse(Path path) {
-		WorkQueue queue = new WorkQueue(threads);
-		
-		traverseHelper(path, queue);
-		queue.finish();
-		queue.shutdown();
-	}
-	*/
-
-	// TODO Make a private traverseHelper(Path path, WorkQueue queue)
 	/**
 	 * Traverses the directory, if the file ends in "HTML" buildIndex
 	 * method is called
@@ -40,24 +38,41 @@ public class ThreadSafeInvertedIndexBuilder {
 	 * @throws IOException
 	 */
 	public void traverse(Path path, ThreadSafeInvertedIndex index) throws IOException {
+		traverseHelper(path, index);
+		workers.finish();
+	}
+	
+	/**
+	 * Helper method to traverse
+	 * 
+	 * @param path
+	 * 				path to traverse
+	 * @param index
+	 * 				the inverted index to add words to
+	 * @throws IOException
+	 */
+	private void traverseHelper(Path path, ThreadSafeInvertedIndex index) throws IOException {
 		if (Files.isDirectory(path)) {
 			
 			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 				
 				for (Path extension : listing) {
-					traverse(extension, index); // TODO Call traverseHelper
+					traverseHelper (extension, index);
 				}
 			}
 		}
 		else if (path.toString().toLowerCase().endsWith("htm") || path.toString().toLowerCase().endsWith("html")) {
 			workers.execute(new FileWorker(path, index));
 		}
-		workers.finish(); // TODO Remove
 	}
 	
+	/**
+	 * Adds the path into the structure &
+	 * builds the index
+	 */
 	private class FileWorker implements Runnable {
-		private Path path;
-		private ThreadSafeInvertedIndex index;
+		Path path;
+		ThreadSafeInvertedIndex index;
 		
 		public FileWorker(Path path, ThreadSafeInvertedIndex index) {
 			this.path = path;
@@ -68,9 +83,10 @@ public class ThreadSafeInvertedIndexBuilder {
 		public void run() {
 			try {
 				InvertedIndexBuilder.buildIndex(path, index);
+				logger.debug("Building index: " + path);
 			}
 			catch (IOException e) {
-				logger.warn("Unable to parse {}");
+				logger.debug("Unable to parse {}");
 			}
 		}
 	}

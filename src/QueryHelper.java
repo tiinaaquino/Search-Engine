@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-// TODO Create a QueryHelperInterface and implement it in both places
-
 /**
  * This class is responsible for parsing, cleaning,
  * and storing queries.
  */
 
-public class QueryHelper {
+public class QueryHelper implements QueryInterface{
 	
 	/**
 	 * Stores the query in a map where the key is the cleaned line.
@@ -26,7 +24,7 @@ public class QueryHelper {
 	 * Initializes an empty result map.
 	 */
 	public QueryHelper(InvertedIndex index) {
-		result = new TreeMap<>();
+		this.result = new TreeMap<>();
 		this.index = index;
 	}
 	

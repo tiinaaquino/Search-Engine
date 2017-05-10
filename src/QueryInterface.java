@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Query interface for QueryHelper and ThreadSafeQueryHelper
+ */
 public interface QueryInterface {
 	
 	/**

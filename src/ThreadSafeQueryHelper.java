@@ -7,82 +7,94 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-public class ThreadSafeQueryHelper {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/**
+ * This class is responsible for parsing, cleaning,
+ * and storing queries.
+ */
+
+public class ThreadSafeQueryHelper implements QueryInterface{
 	
 	/**
 	 * Stores the query in a map where the key is the cleaned line.
 	 */
 	private final TreeMap<String, ArrayList<SearchResult>> result;
+	/**
+	 * Thread safe inverted index
+	 */
 	private final ThreadSafeInvertedIndex index;
-	private ReadWriteLock lock; // TODO final
-	private final WorkQueue workers; // TODO store the # of threads instead
+	/**
+	 * Lock object for multi threading
+	 */
+	private final ReadWriteLock lock;
+	/**
+	 * Worker thread object
+	 */
+	private final WorkQueue workers;
 	
-	public ThreadSafeQueryHelper(ThreadSafeInvertedIndex index, int threads) {
+	private static final Logger logger = LogManager.getLogger();
+	
+	/**
+	 * Initializes an empty map result
+	 */
+	public ThreadSafeQueryHelper(ThreadSafeInvertedIndex index, WorkQueue workers) {
 		super();
 		result = new TreeMap<>();
-		workers = new WorkQueue(threads);
+		this.workers = workers;
 		lock = new ReadWriteLock();
 		this.index = index;
 	}
 	
+	
 	public void parse(Path path, boolean exact) throws IOException {
-		// TODO Create workqueue
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			
 			while ((line = reader.readLine()) != null) {
-				// TODO Move all of this work into run()
-				String[] words = WordParser.parseWords(line);
-				
-				if (words.length == 0) {
-					continue; // TODO return
-				}
-				
-				Arrays.sort(words);
-				line = String.join(" ", words);
-
-				workers.execute(new LineWorker(line, index, result,  words, exact));
+				workers.execute(new LineWorker(line, index, result, exact));
 			}
 			workers.finish();
 		}
-		// TODO queue.shutdown()
 	}
 	
-	/**
-	 * writes object to JSON format
-	 * 
-	 * @param path
-	 * 			path to input
-	 * @throws IOException
-	 */
 	public void toJSON(Path path) throws IOException {
-		lock.unlockReadWrite(); // TODO lock for read only
+		lock.lockReadOnly();
 		try {
 			JSONWriter.asSearchObject(result, path);
 		}
 		finally {
-			lock.unlockReadWrite();
+			lock.unlockReadOnly();
 		}
 	}
 	
-	// TODO Remove index, result and access those members directly
 	private class LineWorker implements Runnable {
 		private String line;
-		private String[] queryWords;
 		private boolean exact;
-		private ThreadSafeInvertedIndex index;
-		private TreeMap<String, ArrayList<SearchResult>> result;
+		private final ThreadSafeInvertedIndex index;
+		private final TreeMap<String, ArrayList<SearchResult>> result;
 		
-		public LineWorker(String line, ThreadSafeInvertedIndex index, TreeMap<String, ArrayList<SearchResult>> result, String[] queryWords, boolean exact) {
+		public LineWorker(String line, ThreadSafeInvertedIndex index, TreeMap<String, ArrayList<SearchResult>> result, boolean exact) {
 			this.line = line;
-			this.result = result;
 			this.index = index;
-			this.queryWords = queryWords;
+			this.result = result;
+			this.exact = exact;
+
 		}
 		
 		@Override
 		public void run() {
-			ArrayList<SearchResult> localList = exact ? index.exactSearch(queryWords) : index.partialSearch(queryWords);
+			String[] words = WordParser.parseWords(line);
+			
+			if (words.length == 0) {
+				return;
+			}
+			
+			Arrays.sort(words);
+			line = String.join(" ", words);
+			
+			ArrayList<SearchResult> localList = exact ? index.exactSearch(words) : index.partialSearch(words);
 			lock.lockReadWrite();
 			
 			try {
@@ -91,6 +103,7 @@ public class ThreadSafeQueryHelper {
 			finally {
 				lock.unlockReadWrite();
 			}
+			logger.debug("Result: " + result);
 		}
 	}
 

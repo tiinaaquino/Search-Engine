@@ -51,8 +51,8 @@ public class WorkQueue {
 	public WorkQueue(int threads) {
 		this.queue = new LinkedList<Runnable>();
 		this.workers = new PoolWorker[threads];
-		pending = 0;
-		shutdown = false;
+		this.pending = 0;
+		this.shutdown = false;
 
 		for (int i = 0; i < threads; i++) {
 			workers[i] = new PoolWorker();
@@ -89,7 +89,6 @@ public class WorkQueue {
 		catch (InterruptedException e) {
 			logger.debug("Finish interrupted", e);
 		}
-		
 	}
 
 	/**
@@ -98,7 +97,6 @@ public class WorkQueue {
 	private void increasePending() {
 		synchronized (queue) {
 			pending++;
-			logger.debug("Pending is now {}", pending);
 		}
 	}
 	
@@ -108,7 +106,6 @@ public class WorkQueue {
 	private void decreasePending() {
 		synchronized (queue) {
 			pending--;
-			logger.debug("Pending is now {}", pending);
 			
 			if (pending <= 0) {
 				queue.notifyAll();
@@ -156,7 +153,7 @@ public class WorkQueue {
 							queue.wait();
 						}
 						catch (InterruptedException ex) {
-							System.err.println("Warning: Work queue interrupted.");
+							logger.debug("Warning: Work queue interrupted.");
 							Thread.currentThread().interrupt();
 						}
 					}
@@ -173,7 +170,7 @@ public class WorkQueue {
 					r.run();
 				}
 				catch (RuntimeException ex) {
-					System.err.println("Warning: Work queue encountered an " + "exception while running.");
+					logger.debug("Warning: Work queue encountered an " + "exception while running.");
 				}
 				finally {
 					decreasePending();
