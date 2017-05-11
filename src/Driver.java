@@ -15,62 +15,14 @@ public class Driver
 	 */
 	public static void main(String[] args)
 	{	
-		/*
 		ArgumentMap argMap = new ArgumentMap(args);
 		InvertedIndex index = null;
 		ThreadSafeInvertedIndexBuilder builder = null;
 		QueryInterface query = null;
 		WorkQueue worker = null;
-		
-		if (-threads) {
-			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
-			
-			worker = new WorkQueue(...);
-			builder = new ThreadSafeInvertedIndexBuilder(threadSafe, worker);
-			query = new ThreadSafeQueryHelper(threadSafe, worker); 
-		
-			index = threadSafe;
-		}
-		else {
-			index = new InvertedIndex();
-			query = new QueryHelper(index);
-		}
-		
-		if (-path) {
-		
-			if (builder != null) {
-				use your multithreaded builder
-			}
-			else {
-				use the single threaded
-			}
-		}		
-		
-		if (-query) {
-			query....
-		}
-		
-		if (-index) {
-			index.asJSON(...);
-		}
-		
-		if (-results) {
-			query.asJSON(...);
-		}
-		
-		if (worker != null) {
-			worker.shutdown();
-		}
-		*/
-		
-		ArgumentMap argMap = new ArgumentMap(args);
-		InvertedIndex index = new InvertedIndex();
+		int threads;
 		String results = argMap.getString("-results", "results.json");
 		String output = argMap.getString("-index", "index.json");
-		
-		ThreadSafeInvertedIndex threadedIndex = new ThreadSafeInvertedIndex();
-		QueryInterface query = new QueryHelper(index); 
-		int threads;
 		
 		try {
 			threads = Integer.parseInt(argMap.getValue("-threads"));
@@ -81,89 +33,67 @@ public class Driver
 		catch (NumberFormatException e) {
 			threads = 5;
 		}
-
-
-		WorkQueue worker = new WorkQueue(threads);
-		ThreadSafeInvertedIndexBuilder builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);	
-		QueryInterface threadedQuery = new ThreadSafeQueryHelper(threadedIndex, worker);
-		
-		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-			if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
-				try {
-					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
-			else {
-				try {
-					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
-		}
 		
 		if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
-			if (argMap.hasFlag("-index")) {
-				try {
-					threadedIndex.asJSON(Paths.get(output));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from " + output);
+			ThreadSafeInvertedIndex threadedIndex = new ThreadSafeInvertedIndex();
+			worker = new WorkQueue(threads);
+			builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);
+			query = new ThreadSafeQueryHelper(threadedIndex, worker); 
+			index = threadedIndex;
+			
+			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
+				if (builder != null) {
+					try {
+						builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
+					}
+					catch (IOException e) {
+						System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+					}
 				}
 			}
 		}
 		else {
-			if (argMap.hasFlag("-index")) {
-				try {
-					index.asJSON(Paths.get(output));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from " + output);
-				}
+			index = new InvertedIndex();
+			query = new QueryHelper(index);
+			try {
+				InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
 			}
+			catch (IOException e) {
+				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+			}
+		
 		}
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
-			if (argMap.hasFlag("-threads") && argMap.hasValue("-threads") && argMap.getValue("-threads") != null) {
-				try {
-					threadedQuery.parse(Paths.get(argMap.getValue("-query")), argMap.hasFlag("-exact"));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build from query file");
-				}
+			try {
+				query.parse(Paths.get(argMap.getValue("-query")), argMap.hasFlag("-exact"));
 			}
-			else {
-				try {
-					query.parse(Paths.get(argMap.getValue("-query")), argMap.hasFlag("-exact"));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build from query file");
-				}
+			catch (IOException e) {
+				System.out.println("Unable to read query");
+			}
+		}
+		
+		if (argMap.hasFlag("-index")) {
+			try {
+				index.asJSON(Paths.get(output));
+			}
+			catch (IOException e) {
+				System.out.println("Unable to write index from " + output);
 			}
 		}
 		
 		if (argMap.hasFlag("-results")) {
-			if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
-				try {
-					threadedQuery.toJSON(Paths.get(results));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build from path" + results);
-				}
+			try {
+				query.asJSON(Paths.get(results));
 			}
-			else {
-				try {
-					query.toJSON(Paths.get(results));
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build from path" + results);
-				}
+			catch (IOException e) {
+				System.out.println("Unable to write results from " + results);
 			}
 		}
-		worker.shutdown();
+		
+		if (worker != null) {
+			worker.shutdown();
+		}
+		
 	}	
 }
