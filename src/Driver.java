@@ -42,26 +42,26 @@ public class Driver
 			index = threadedIndex;
 			
 			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-				if (builder != null) {
-					try {
-						builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
-					}
-					catch (IOException e) {
-						System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-					}
+				try {
+					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
+				}
+				catch (IOException e) {
+					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
 				}
 			}
 		}
 		else {
 			index = new InvertedIndex();
 			query = new QueryHelper(index);
-			try {
-				InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
+			
+			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
+				try {
+					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
+				}
+				catch (IOException e) {
+					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+				}
 			}
-			catch (IOException e) {
-				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-			}
-		
 		}
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
