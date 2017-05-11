@@ -180,7 +180,7 @@ public class InvertedIndex {
 		addHelper(word, path, wordPosition);
 	}
 	
-	/* TODO Implement this and override in your thread-safe version
+	/* Implement this and override in your thread-safe version
 	public void addAll(InvertedIndex other) {
 		for (String word : other.index.keySet()) {
 			if (this.index.containsKey(word) == false) {
@@ -194,6 +194,29 @@ public class InvertedIndex {
 		}
 	}
 	*/
+	
+	/**
+	 * Add all method for ThreadSafeInvertedIndex
+	 * @param other
+	 * 			other index to store info
+	 */
+	public void addAll(InvertedIndex other) {
+		for (String word : other.index.keySet()) {
+			if (this.index.containsKey(word) == false) {
+				this.index.put(word, other.index.get(word));
+			}
+			else {
+				for (String path : other.index.get(word).keySet()) {
+					if (!this.index.get(word).keySet().contains(path)) {
+						other.index.put(path, this.index.get(path));
+					}
+					else {
+						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Calls "asNestedOject" of the JSONWriter class to convert object 
