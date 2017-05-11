@@ -41,6 +41,7 @@ public class Driver
 			query = new ThreadSafeQueryHelper(threadedIndex, worker); 
 			index = threadedIndex;
 			
+			// TODO remove this
 			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 				try {
 					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
@@ -54,6 +55,7 @@ public class Driver
 			index = new InvertedIndex();
 			query = new QueryHelper(index);
 			
+			// TODO Remove this
 			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 				try {
 					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
@@ -63,6 +65,22 @@ public class Driver
 				}
 			}
 		}
+		
+		/* TODO
+		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
+			try {
+				if (builder == null) {
+					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
+				}
+				else {
+					builder.traverse(Paths.get(argMap.getValue("-path")));
+				}
+			}
+			catch (IOException e) {
+				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+			}
+		}
+		*/
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
 			try {

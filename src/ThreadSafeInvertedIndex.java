@@ -42,6 +42,8 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 		}
 	}
 	
+	// TODO @Override addAll(InvertedIndex other)
+	
 	@Override
 	public ArrayList<SearchResult> partialSearch(String[] queryWords) {
 		lock.lockReadOnly();

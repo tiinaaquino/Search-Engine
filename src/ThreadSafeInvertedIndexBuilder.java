@@ -25,6 +25,7 @@ public class ThreadSafeInvertedIndexBuilder {
 	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, WorkQueue workers) {
 		super();
 		this.workers = workers;
+		// TODO Set the ThreadSafeIndex here, and remove as a parameter elsewhere
 	}
 	
 	/**
@@ -82,6 +83,7 @@ public class ThreadSafeInvertedIndexBuilder {
 		@Override
 		public void run() {
 			try {
+				// TODO Comment this out
 				InvertedIndexBuilder.buildIndex(path, index);				
 				logger.debug("Building index: " + path);
 				
