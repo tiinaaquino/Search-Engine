@@ -63,7 +63,7 @@ public class QueryHelper implements QueryInterface{
 	 * 			path to input
 	 * @throws IOException
 	 */
-	public void toJSON(Path path) throws IOException {
+	public void asJSON(Path path) throws IOException {
 		JSONWriter.asSearchObject(result, path);
 	}
 	
