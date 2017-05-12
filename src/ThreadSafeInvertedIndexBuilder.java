@@ -83,13 +83,11 @@ public class ThreadSafeInvertedIndexBuilder {
 		@Override
 		public void run() {
 			try {
-				// TODO Comment this out
-				InvertedIndexBuilder.buildIndex(path, index);				
-				logger.debug("Building index: " + path);
-				
 				InvertedIndex local = new InvertedIndex();
 				InvertedIndexBuilder.buildIndex(path, local);
 				index.addAll(local);
+				logger.debug("Building index: " + path);
+
 			}
 			catch (IOException e) {
 				logger.debug("Unable to parse {}");
