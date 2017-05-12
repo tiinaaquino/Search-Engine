@@ -25,7 +25,6 @@ public class ThreadSafeInvertedIndexBuilder {
 	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, WorkQueue workers) {
 		super();
 		this.workers = workers;
-		// TODO Set the ThreadSafeIndex here, and remove as a parameter elsewhere
 	}
 	
 	/**
@@ -94,5 +93,4 @@ public class ThreadSafeInvertedIndexBuilder {
 			}
 		}
 	}
-
 }
