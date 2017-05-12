@@ -40,47 +40,33 @@ public class Driver
 			builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);
 			query = new ThreadSafeQueryHelper(threadedIndex, worker); 
 			index = threadedIndex;
-			
-			// TODO remove this
-			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-				try {
-					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
 		}
 		else {
 			index = new InvertedIndex();
 			query = new QueryHelper(index);
-			
-			// TODO Remove this
-			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-				try {
-					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
 		}
 		
-		/* TODO
 		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 			try {
 				if (builder == null) {
 					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
 				}
 				else {
-					builder.traverse(Paths.get(argMap.getValue("-path")));
+					if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
+						ThreadSafeInvertedIndex threadedIndex = new ThreadSafeInvertedIndex();
+						worker = new WorkQueue(threads);
+						builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);
+						query = new ThreadSafeQueryHelper(threadedIndex, worker); 
+						index = threadedIndex;
+						builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
+					}
 				}
 			}
 			catch (IOException e) {
 				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
 			}
 		}
-		*/
+
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
 			try {
