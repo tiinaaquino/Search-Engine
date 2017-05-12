@@ -193,10 +193,11 @@ public class InvertedIndex {
 			else {
 				for (String path : other.index.get(word).keySet()) {
 					if (!this.index.get(word).keySet().contains(path)) {
-						other.index.put(path, this.index.get(path)); // TODO this.index.put (... other.index)
+						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
 					}
 					else {
-						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
+						other.index.put(path, this.index.get(path));
+
 					}
 				}
 			}
