@@ -44,13 +44,13 @@ public class ThreadSafeInvertedIndex extends InvertedIndex{
 	
 	@Override
 	public void addAll(InvertedIndex other) {
-		lock.lockReadOnly();
+		lock.lockReadWrite();
 		
 		try {
 			super.addAll(other);
 		}
 		finally {
-			lock.unlockReadOnly();
+			lock.unlockReadWrite();
 		}
 	}
 	
