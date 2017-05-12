@@ -180,21 +180,6 @@ public class InvertedIndex {
 		addHelper(word, path, wordPosition);
 	}
 	
-	/* Implement this and override in your thread-safe version
-	public void addAll(InvertedIndex other) {
-		for (String word : other.index.keySet()) {
-			if (this.index.containsKey(word) == false) {
-				this.index.put(word, other.index.get(word));
-			}
-			else {
-				loop through every path in other
-					if that path does not exist in this, put() of the path and position set from other
-					else, use the set.addAll method to combine the position sets of this.index and other.index
-			}
-		}
-	}
-	*/
-	
 	/**
 	 * Add all method for ThreadSafeInvertedIndex
 	 * @param other
@@ -208,7 +193,7 @@ public class InvertedIndex {
 			else {
 				for (String path : other.index.get(word).keySet()) {
 					if (!this.index.get(word).keySet().contains(path)) {
-						other.index.put(path, this.index.get(path));
+						other.index.put(path, this.index.get(path)); // TODO this.index.put (... other.index)
 					}
 					else {
 						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
