@@ -82,6 +82,7 @@ public class ThreadSafeInvertedIndexBuilder {
 		@Override
 		public void run() {
 			try {
+				InvertedIndexBuilder.buildIndex(path, index);
 				InvertedIndex local = new InvertedIndex();
 				InvertedIndexBuilder.buildIndex(path, local);
 				index.addAll(local);
