@@ -145,45 +145,45 @@ public class Driver
 			index = threadedIndex;
 			
 			// TODO remove this
-			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-				try {
-					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
+//			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
+//				try {
+//					builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
+//				}
+//				catch (IOException e) {
+//					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+//				}
+//			}
 		}
 		else {
 			index = new InvertedIndex();
 			query = new QueryHelper(index);
 			
 			// TODO Remove this
-			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
-				try {
-					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
-				}
-				catch (IOException e) {
-					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
-				}
-			}
+//			if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
+//				try {
+//					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
+//				}
+//				catch (IOException e) {
+//					System.out.println("Unable to build index from the path " + argMap.getString("-path"));
+//				}
+//			}
 		}
 		
-		/* TODO
+//		/* TODO
 		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
 			try {
 				if (builder == null) {
 					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
 				}
 				else {
-					builder.traverse(Paths.get(argMap.getValue("-path")));
+					builder.traverse(Paths.get(argMap.getValue("-path")), (ThreadSafeInvertedIndex) index);
 				}
 			}
 			catch (IOException e) {
 				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
 			}
 		}
-		*/
+//		*/
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
 			try {
