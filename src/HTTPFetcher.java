@@ -158,6 +158,41 @@ public class HTTPFetcher {
 
 		return null;
 	}
+	
+	/**
+	 * Fetches the HTML for the specified URL (without headers).
+	 *
+	 * @param url
+	 *            - url to fetch
+	 * @return HTML as a single {@link String}, or null if not HTML
+	 *
+	 * @throws UnknownHostException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
+	public static String fetchHTMLString(String url) throws UnknownHostException, MalformedURLException, IOException {
+		URL target = new URL(url);
+		String request = craftHTTPRequest(target, HTTP.GET);
+		List<String> lines = fetchLines(target, request);
+
+		int start = 0;
+		int end = lines.size();
+
+		// Determines start of HTML versus headers.
+		while (!lines.get(start).trim().isEmpty() && start < end) {
+			start++;
+		}
+
+		// Double-check this is an HTML file.
+		Map<String, String> fields = parseHeaders(lines.subList(0, start + 1));
+		String type = fields.get("Content-Type");
+
+		if (type != null && type.toLowerCase().contains("html")) {
+			return String.join(System.lineSeparator(), lines.subList(start + 1, end));
+		}
+
+		return null;
+	}
 
 	/**
 	 * Helper method that parses HTTP headers into a map where the key is the

@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +42,17 @@ public class ThreadSafeInvertedIndexBuilder {
 	public void traverse(Path path, ThreadSafeInvertedIndex index) throws IOException {
 		traverseHelper(path, index);
 		workers.finish();
+	}
+	
+	/**
+	 * Traverse the given URL and find up to 50 URL
+	 * 
+	 * @param link
+	 * @param index
+	 */
+	public void traverseURL(String link, ThreadSafeInvertedIndex index) throws UnknownHostException, MalformedURLException, IOException{
+		WebCrawler webCrawler = new WebCrawler(workers.size(), index);
+		webCrawler.traverse(link);
 	}
 	
 	/**
