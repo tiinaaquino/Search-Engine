@@ -84,7 +84,6 @@ public class ThreadSafeQueryHelper implements QueryInterface{
 			this.index = index;
 			this.result = result;
 			this.exact = exact;
-
 		}
 		
 		@Override
