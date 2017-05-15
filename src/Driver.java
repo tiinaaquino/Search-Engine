@@ -44,6 +44,7 @@ public class Driver
 		else {
 			index = new InvertedIndex();
 			query = new QueryHelper(index);
+			
 		}
 		
 		if (argMap.hasFlag("-path") && argMap.hasValue("-path")) {
@@ -52,21 +53,13 @@ public class Driver
 					InvertedIndexBuilder.traverse(Paths.get(argMap.getValue("-path")), index);
 				}
 				else {
-					if (argMap.hasFlag("-threads") && argMap.hasValue("-threads")) {
-						ThreadSafeInvertedIndex threadedIndex = new ThreadSafeInvertedIndex();
-						worker = new WorkQueue(threads);
-						builder = new ThreadSafeInvertedIndexBuilder(threadedIndex, worker);
-						query = new ThreadSafeQueryHelper(threadedIndex, worker); 
-						index = threadedIndex;
-						builder.traverse(Paths.get(argMap.getValue("-path")), threadedIndex);
-					}
+					builder.traverse(Paths.get(argMap.getValue("-path")), (ThreadSafeInvertedIndex) index);
 				}
 			}
 			catch (IOException e) {
 				System.out.println("Unable to build index from the path " + argMap.getString("-path"));
 			}
 		}
-
 		
 		if (argMap.hasFlag("-query") && argMap.hasValue("-query")) {
 			try {
