@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -77,13 +79,13 @@ public class HTTPFetcher {
 	 *
 	 * @see {@link HTTP}
 	 */
-	public static String craftHTTPRequest(URL url, HTTP type) {
+	public static String craftHTTPRequest(URL url) {
 		String host = url.getHost();
 		String resource = url.getFile().isEmpty() ? "/" : url.getFile();
 
 		// The specification is specific about where to use a new line
 		// versus a carriage return!
-		return String.format("%s %s %s\r\n" + "Host: %s\r\n" + "Connection: close\r\n" + "\r\n", type.name(), resource,
+		return String.format("%s %s %s\r\n" + "Host: %s\r\n" + "Connection: close\r\n" + "\r\n", HTTP.GET.name(), resource,
 				version, host);
 	}
 
@@ -98,13 +100,13 @@ public class HTTPFetcher {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String fetchHeaders(String url) throws UnknownHostException, MalformedURLException, IOException {
-		URL target = new URL(url);
-		String request = craftHTTPRequest(target, HTTP.HEAD);
-		List<String> lines = fetchLines(target, request);
-
-		return String.join(System.lineSeparator(), lines);
-	}
+//	public static String fetchHeaders(String url) throws UnknownHostException, MalformedURLException, IOException {
+//		URL target = new URL(url);
+//		String request = craftHTTPRequest(target, HTTP.HEAD);
+//		List<String> lines = fetchLines(target, request);
+//
+//		return String.join(System.lineSeparator(), lines);
+//	}
 
 	/**
 	 * Fetches the headers and HTML for the specified URL.
@@ -117,13 +119,13 @@ public class HTTPFetcher {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String fetchAll(String url) throws UnknownHostException, MalformedURLException, IOException {
-		URL target = new URL(url);
-		String request = craftHTTPRequest(target, HTTP.GET);
-		List<String> lines = fetchLines(target, request);
-
-		return String.join(System.lineSeparator(), lines);
-	}
+//	public static String fetchAll(String url) throws UnknownHostException, MalformedURLException, IOException {
+//		URL target = new URL(url);
+//		String request = craftHTTPRequest(target, HTTP.GET);
+//		List<String> lines = fetchLines(target, request);
+//
+//		return String.join(System.lineSeparator(), lines);
+//	}
 
 	/**
 	 * Fetches the HTML for the specified URL (without headers).
@@ -137,7 +139,7 @@ public class HTTPFetcher {
 	 * @throws IOException
 	 */
 	public static String fetchHTML(URL target) throws UnknownHostException, MalformedURLException, IOException {
-		String request = craftHTTPRequest(target, HTTP.GET);
+		String request = craftHTTPRequest(target);
 		List<String> lines = fetchLines(target, request);
 
 		int start = 0;
@@ -170,28 +172,54 @@ public class HTTPFetcher {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String fetchHTMLString(String url) throws UnknownHostException, MalformedURLException, IOException {
-		URL target = new URL(url);
-		String request = craftHTTPRequest(target, HTTP.GET);
-		List<String> lines = fetchLines(target, request);
-
+	public static String fetchHTMLString(String current, String baseURL) {
+		URL base;
+		URL target = null;
+		URI baseURI = null;
+		String request = null;
+		List<String> lines = null;
 		int start = 0;
-		int end = lines.size();
+		assert lines != null;
+		try {
+			base = new URL(baseURL);
+			target = new URL(base, current);
+		}
+		catch (MalformedURLException e) {
+			
+		}
+		try {
+			assert target != null;
+			baseURI = new URI(target.getProtocol(), target.getAuthority(), target.getPath(), target.getQuery(), null);
+		}
+		catch (URISyntaxException e) {
 
-		// Determines start of HTML versus headers.
-		while (!lines.get(start).trim().isEmpty() && start < end) {
+		}
+		try {
+			assert baseURI != null;
+			request = craftHTTPRequest(baseURI.toURL());
+		}
+		catch (MalformedURLException e) {
+			
+		}
+		try {
+			lines = fetchLines(baseURI.toURL(), request);
+		}
+		catch (IOException e) {
+			
+		}
+		
+		while (!lines.get(start).trim().isEmpty() && start < lines.size()) {
 			start++;
 		}
-
-		// Double-check this is an HTML file.
+		
 		Map<String, String> fields = parseHeaders(lines.subList(0, start + 1));
-		String type = fields.get("Content-Type");
-
-		if (type != null && type.toLowerCase().contains("html")) {
-			return String.join(System.lineSeparator(), lines.subList(start + 1, end));
+		String contentType = fields.get("Content-Type");
+		if (contentType != null && contentType.toLowerCase().contains("html")) {
+			return String.join(System.lineSeparator(), lines.subList(start + 1, lines.size()));
 		}
-
+		
 		return null;
+		
 	}
 
 	/**
@@ -235,13 +263,13 @@ public class HTTPFetcher {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static Map<String, String> getHeaderFields(String url)
-			throws UnknownHostException, MalformedURLException, IOException {
-		URL target = new URL(url);
-		String request = craftHTTPRequest(target, HTTP.HEAD);
-		List<String> lines = fetchLines(target, request);
-
-		return parseHeaders(lines);
-	}
+//	public static Map<String, String> getHeaderFields(String url)
+//			throws UnknownHostException, MalformedURLException, IOException {
+//		URL target = new URL(url);
+//		String request = craftHTTPRequest(target, HTTP.HEAD);
+//		List<String> lines = fetchLines(target, request);
+//
+//		return parseHeaders(lines);
+//	}
 
 }
