@@ -23,7 +23,7 @@ public class WebCrawler {
 		lock = new ReadWriteLock();
 	}
 	
-	public void traverse(URL url) throws MalformedURLException {
+	public void crawl(URL url) throws MalformedURLException {
 		if ((urlSet.size() < MAX_CAPACITY) && (!urlSet.contains(url))) {
 			workers.execute(new CrawlWorker(url, urlSet));
 		}
