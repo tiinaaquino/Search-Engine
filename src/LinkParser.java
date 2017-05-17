@@ -84,12 +84,12 @@ public class LinkParser {
 		while (m.find()) {
 			String s = m.group(group);
 			
-			if(!s.startsWith("http")) {
+//			if(!s.startsWith("http")) {
 				link = new URL(base, s);
-			}
-			else {
-				link = new URL(s);
-			}
+//			}
+//			else {
+//				link = new URL(s);
+//			}
 			
 			if (link.toString().startsWith("http")) {
 				links.add(clean(link));

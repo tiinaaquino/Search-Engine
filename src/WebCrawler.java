@@ -8,33 +8,37 @@ import java.util.HashSet;
 
 public class WebCrawler 
 {
-	private WorkQueue queue = new WorkQueue();
+	private WorkQueue queue; // TODO  = new WorkQueue();
 //	private ReadWriteLock lock = new ReadWriteLock();
-	private ThreadSafeInvertedIndex index = new ThreadSafeInvertedIndex();
-	private final HashSet<String> set;
+	private ThreadSafeInvertedIndex index; // TODO = new ThreadSafeInvertedIndex();
+	// private final HashSet<String> set;
+	private final HashSet<URL> set;
 //	private static final Logger logger = LogManager.getLogger();
-	private final int MAX = 50;
+//	private final int MAX = 50;
+	private int MAX;
 	
 	public WebCrawler(ThreadSafeInvertedIndex index, WorkQueue queue)
 	{
 		this.index = index;
 		this.queue = queue;
 		this.set = new HashSet<>();
+		this.MAX = 0;
 	}
 	
 	
 	public void crawl(URL url, int limit) throws MalformedURLException 
 	{
-		if (limit > MAX)
-		{
-			limit = MAX;
-		}
+		MAX += limit;
+//		if (limit > MAX)
+//		{
+//			limit = MAX;
+//		}
 		
 		System.out.println(url);
 		
-		set.add(url.toString());
+		set.add(url);
 		
-		queue.execute(new CrawlWorker(url, set, index));
+		queue.execute(new CrawlWorker(url)); // TODO, set, index));
 		queue.finish();
 		
 	}
@@ -42,14 +46,14 @@ public class WebCrawler
 	private class CrawlWorker implements Runnable
 	{
 		private URL url;
-		private final HashSet<String> set;
-		private final ThreadSafeInvertedIndex index;
+//		private final HashSet<String> set;
+//		private final ThreadSafeInvertedIndex index;
 		
-		private CrawlWorker(URL url, HashSet<String> set, ThreadSafeInvertedIndex index)
+		private CrawlWorker(URL url) // TODO, HashSet<String> set, ThreadSafeInvertedIndex index)
 		{
 			this.url = url;
-			this.set = set;
-			this.index = index;
+//			this.set = set;
+//			this.index = index;
 		}
 		
 		@Override
@@ -59,12 +63,18 @@ public class WebCrawler
 			ArrayList<URL> processedURL;
 			try {
 				processedURL = LinkParser.listLinks(url, html);
-				
-				for (int i = 0; i < processedURL.size(); i++)
-				{
-					if (!set.contains(processedURL.get(i)))
+				synchronized (set) {
+					for (int i = 0; i < processedURL.size(); i++)
 					{
-						set.add(processedURL.get(i).toString());
+						if (set.size() >= MAX) {
+							break;
+						}
+						
+						if (!set.contains(processedURL.get(i)))
+						{
+							set.add(processedURL.get(i));
+							queue.execute(new CrawlWorker(processedURL.get(i)));
+						}
 					}
 				}
 			} catch (MalformedURLException e) {
@@ -76,7 +86,8 @@ public class WebCrawler
 			String cleaned = HTMLCleaner.stripHTML(html);
 			String[] words = WordParser.parseWords(cleaned);
 
-			index.addAll(words, Paths.get(url.toString()));
+			//index.addAll(words, Paths.get(url.toString()));
+			index.addAll(words, url.toString());
 
 		}
 	}

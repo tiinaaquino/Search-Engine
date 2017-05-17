@@ -165,6 +165,16 @@ public class InvertedIndex {
 		}
 	}
 	
+	// TODO
+	public void addAll(String[] words, String path) {
+		int position = 1;
+		
+		for (String i : words) {
+			addHelper(i, path, position);
+			position++;
+		}
+	}
+	
 	/**
 	 * Stores the word, its path, and word position
 	 * to the index, implements addHelper method
