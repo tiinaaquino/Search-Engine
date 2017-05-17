@@ -1,4 +1,4 @@
-//import java.io.IOException;
+//import java.io.IOException; 
 //import java.net.MalformedURLException;
 //import java.net.URL;
 //import java.util.ArrayList;
@@ -107,45 +107,42 @@ public class WebCrawler
 	private final HashSet<String> set;
 	private static final Logger logger = LogManager.getLogger();
 	private final int MAX = 50;
-	private URL link;
 	
-	public WebCrawler(URL link, ThreadSafeInvertedIndex index)
+	public WebCrawler(ThreadSafeInvertedIndex index, WorkQueue queue)
 	{
-		this.link = link;
 		this.index = index;
-//		this.queue = queue;
+		this.queue = queue;
 		this.set = new HashSet<>();
 	}
 	
 	
-	public void crawl(URL url) throws MalformedURLException 
+	public void crawl(URL url, int limit) throws MalformedURLException 
 	{
-		if ((set.size() < MAX) && !set.contains(url))
+		if (limit > MAX)
 		{
-			queue.execute(new CrawlWorker(url, index));
+			limit = MAX;
 		}
+		
+		System.out.println(url);
 		
 		set.add(url.toString());
 		
+		queue.execute(new CrawlWorker(url, set, index));
 		queue.finish();
 		
 	}
 	
-//	if ((urlSet.size() < MAX_CAPACITY) && (!urlSet.contains(url))) {
-//		workers.execute(new CrawlWorker(url, urlSet));
-//	}
-//	workers.finish();
-	
 	private class CrawlWorker implements Runnable
 	{
 		private URL url;
+		private final HashSet<String> set;
 		private final ThreadSafeInvertedIndex index;
 		
-		private CrawlWorker(URL url, ThreadSafeInvertedIndex index)
+		private CrawlWorker(URL url, HashSet<String> set, ThreadSafeInvertedIndex index)
 		{
 			this.url = url;
+			this.set = set;
 			this.index = index;
-			//logger.debug("Worker created for {}", set);
 		}
 		
 		private String getBase(URL url) throws MalformedURLException
@@ -158,27 +155,31 @@ public class WebCrawler
 		
 		
 		@Override
-		public void run() {
+		public void run()
+		{
 			String html = LinkParser.fetchHTML(url);
 			ArrayList<URL> processedURL;
 			try {
 				processedURL = LinkParser.listLinks(url, html);
 				
-				for (int i = 0; i < processedURL.size(); i++) {
-					if (!set.contains(processedURL.get(i))) {
+				for (int i = 0; i < processedURL.size(); i++)
+				{
+					if (!set.contains(processedURL.get(i)))
+					{
 						set.add(processedURL.get(i).toString());
 					}
 				}
-			} 
-			catch (MalformedURLException e) {
+			} catch (MalformedURLException e) {
 				e.printStackTrace();
-				System.out.println("web crawler run");
 			}
+			
+			
 
 			String cleaned = HTMLCleaner.stripHTML(html);
 			String[] words = WordParser.parseWords(cleaned);
 
 			index.addAll(words, Paths.get(url.toString()));
+
 		}
 	}
 }
