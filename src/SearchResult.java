@@ -1,4 +1,3 @@
-
 /**
  * This class is responsible for storing basic search
  * information.
