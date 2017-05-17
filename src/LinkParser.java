@@ -98,32 +98,4 @@ public class LinkParser {
 
 		return links;
 	}
-	
-	/**
-	 * Returns a list of all the HTTP(S) links found in the href attribute of the
-	 * anchor tags in the provided HTML. The links will be converted to absolute
-	 * using the base URL and cleaned (removing fragments and encoding special
-	 * characters as necessary).
-	 *
-	 * @param html
-	 *            raw html associated with the base url
-	 * @return cleaned list of all http(s) links in the order they were found
-	 */
-	public static ArrayList<String> linksList(String html) throws MalformedURLException {
-		ArrayList<String> links = new ArrayList<String>();
-				
-		Pattern p = Pattern.compile("(?i)<a[^>]*\\s*href\\s*=\\s*\"(.*?)\\s*\"\\s*");
-		Matcher m = p.matcher(html);
-		
-		int group = 1;
-		
-		while (m.find()) {
-
-			links.add(m.group(group));
-		}
-
-		return links;
-	}
-	
-	
 }
