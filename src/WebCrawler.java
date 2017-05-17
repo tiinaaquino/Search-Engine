@@ -52,15 +52,6 @@ public class WebCrawler
 			this.index = index;
 		}
 		
-		private String getBase(URL url) throws MalformedURLException
-		{
-			String base = "";
-			base = url.getProtocol() + "://" + url.getHost() + url.getPath();
-			
-			return base;
-		}
-		
-		
 		@Override
 		public void run()
 		{
