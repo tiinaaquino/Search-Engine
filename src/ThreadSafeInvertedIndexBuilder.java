@@ -69,7 +69,7 @@ public class ThreadSafeInvertedIndexBuilder {
 	}
 	
 	public void traverseURL(URL link, ThreadSafeInvertedIndex index) throws MalformedURLException {
-		WebCrawler crawler = new WebCrawler(workers.size(), index);
+		WebCrawler crawler = new WebCrawler(link, index);
 		crawler.crawl(link);
 	}
 	
