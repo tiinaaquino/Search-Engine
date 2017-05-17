@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -64,6 +66,11 @@ public class ThreadSafeInvertedIndexBuilder {
 		else if (path.toString().toLowerCase().endsWith("htm") || path.toString().toLowerCase().endsWith("html")) {
 			workers.execute(new FileWorker(path, index));
 		}
+	}
+	
+	public void traverseURL(URL link, ThreadSafeInvertedIndex index) throws MalformedURLException {
+		WebCrawler crawler = new WebCrawler(workers.size(), index);
+		crawler.crawl(link);
 	}
 	
 	/**
