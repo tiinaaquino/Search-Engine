@@ -2,13 +2,14 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class WebCrawler {
 
-	private ArrayList<String> links;
+	private HashSet<URL> urlSet;
 	private ThreadSafeInvertedIndex index;
 	private final WorkQueue workers;
 	private static final Logger logger = LogManager.getLogger();
@@ -18,63 +19,62 @@ public class WebCrawler {
 	public WebCrawler (int numThreads, ThreadSafeInvertedIndex index) {
 		this.index = index;
 		workers = new WorkQueue(numThreads);
-		links = new ArrayList<>();
+		urlSet = new HashSet<>();
 		lock = new ReadWriteLock();
 	}
 	
-	public void traverse(String url) throws MalformedURLException {
-		logger.debug("Adding {} into links", url);
-		links.add(url);
-		
-		for (int i = 0; (i < MAX_CAPACITY) && (i < links.size()); i++) {
-			String link = links.get(i);
-			logger.debug("Executing for link {}", link);
-			workers.execute(new CrawlWorker(link, links));
-			finish();
+	public void traverse(URL url) throws MalformedURLException {
+		if ((urlSet.size() < MAX_CAPACITY) && (!urlSet.contains(url))) {
+			workers.execute(new CrawlWorker(url, urlSet));
 		}
-		logger.debug("Links size: {}", links.size());
+		finish();
 	}
 	
 	private class CrawlWorker implements Runnable {
-		private String link;
-		private ArrayList<String> links;
+		private URL link;
+		private HashSet<URL> urlSet;
 		
-		private CrawlWorker(String link, ArrayList<String> links) {
+		public CrawlWorker(URL link, HashSet<URL> urlSet) {
 			this.link = link;
-			this.links = links;
+			this.urlSet = urlSet;
 			logger.debug("Worker created for {}", link);
 		}
 		
 		@Override
 		public void run() {
 			try {
-				String html = HTTPFetcher.fetchHTMLString(link);
-				ArrayList<String> innerURLs = LinkParser.linksList(html);
+				lock.lockReadWrite();
+				urlSet.add(link);
+				lock.unlockReadWrite();
 				
-				for (int i = 0; (i < innerURLs.size()) && (links.size() < MAX_CAPACITY); i++) {
-					String innerURL = innerURLs.get(i);
-					URL base = new URL(link);
-					URL absolute = new URL(base, innerURL);
-					logger.debug("link {}", absolute.toString());
-					
-					if ((!link.contains(absolute.toString())) && (!absolute.toString().contains("#"))) {
-						links.add(absolute.toString());
-						logger.debug("added, {}", absolute.toString());
-					}
+				String html = HTTPFetcher.fetchHTML(link);
+				
+				lock.lockReadWrite();
+				ArrayList<URL> URLs = LinkParser.listLinks(link, html);
+				
+				for (int i = 0; (i < URLs.size()) && (urlSet.size() < MAX_CAPACITY); i++) {
+					URL absolute = URLs.get(i);
+					workers.execute(new CrawlWorker(absolute, urlSet));
 				}
+				
+				lock.unlockReadWrite();
 				
 				html = HTMLCleaner.stripHTML(html);
 				String[] words = WordParser.split(html);
 				int position = 1;
 				
+				InvertedIndex local = new InvertedIndex();
+				
 				for (String word : words) {
-					index.add(word, link, position);
+					local.add(word, link.toString(), position);
 					position++;
 				}
-				logger.debug("Passed words for this {} into index", link);
+				
+				index.addAll(local);
+								
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Invalid link");
 			}
 			logger.debug("Worker finished {}", link);
 		}
