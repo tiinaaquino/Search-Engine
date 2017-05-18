@@ -28,12 +28,30 @@ public class Project2SearchTest {
 		
 		@Test
 		public void testExactSearch01() {
+//			index.add("van", "", 5);
+//			index.add("car", "path1", 8);
+//			index.add("automobile", "path2", 79);
+//			
+//			System.out.println("INDEX = " + index);
+//			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van"});
+//			System.out.println("RESULT = " + result);
+//			
+//			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+//			expected.add(new SearchResult("", 1, 5));
+//			expected.add(new SearchResult("path1", 1, 8));
+//			System.out.println("EXPECTED = " + expected);
+//			
+//			Assert.assertEquals(result, expected);
+		}
+		
+		@Test
+		public void testExactSearch02() {
 			index.add("van", "", 5);
 			index.add("car", "path1", 8);
 			index.add("automobile", "path2", 79);
 			
 			System.out.println(index);
-			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van", "car", "automobile"});
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"vancouver"});
 			System.out.println(result);
 			
 			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
@@ -41,25 +59,28 @@ public class Project2SearchTest {
 			expected.add(new SearchResult("path1", 1, 8));
 			System.out.println(expected);
 			
-			Assert.assertEquals(result, expected);
+			Assert.assertNotEquals(result, expected);
 		}
 		
 		
-//		@Test
+		@Test
+		public void testExactSearch03() {
+
+		}
 		
 		
 		
-//		@Test
+		@Test
+		public void testExactSearch04() {
+
+		}
 		
 		
 		
-//		@Test
-		
-		
-		
-//		@Test
-		
-		
+		@Test
+		public void testExactSearch05() {
+
+		}		
 		
 	}
 	
@@ -79,19 +100,31 @@ public class Project2SearchTest {
 		
 		
 		
-//		@Test
+		@Test
+		public void testPartialSearch02() {
+			
+		}
 		
 		
 		
-//		@Test
+		@Test
+		public void testPartialSearch03() {
+			
+		}
 		
 		
 		
-//		@Test
+		@Test
+		public void testPartialSearch04() {
+			
+		}
 		
 		
 		
-//		@Test
+		@Test
+		public void testPartialSearch05() {
+			
+		}
 		
 		
 		
