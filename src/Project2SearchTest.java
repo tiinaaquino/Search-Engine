@@ -26,7 +26,6 @@ public class Project2SearchTest {
 			index = new InvertedIndex();
 		}
 		
-		
 		@Test
 		public void testExactSearch01() {
 			index.add("van", "", 5);
@@ -34,7 +33,7 @@ public class Project2SearchTest {
 			index.add("automobile", "path2", 79);
 			
 			System.out.println(index);
-			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van", "car"});
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van", "car", "automobile"});
 			System.out.println(result);
 			
 			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
@@ -73,7 +72,10 @@ public class Project2SearchTest {
 			index = new InvertedIndex();
 		}
 		
-//		@Test
+		@Test
+		public void testPartialSearch01() {
+			
+		}
 		
 		
 		
