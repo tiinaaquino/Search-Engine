@@ -37,7 +37,7 @@ public class HTMLCleaner {
 	 * @return text without any HTML tags
 	 */
 	public static String stripTags(String html) {
-		return html.replaceAll("(?s)(?i)<" + "\\n*(.*?)" + "\\n*>", " ");
+		return html.replaceAll("(?s)<.*?>", " ");
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class HTMLCleaner {
 	 * @return text without that HTML element
 	 */
 	public static String stripElement(String html, String name) {
-		return html.replaceAll("(?si)<" + name + "\\s*(.*?)" + name + "\\s*>", " ");
+		return html.replaceAll("(?s)(?i)<" + name + "[^>]*?>.*?</" + name + "\\s*?>", " ");	
 	}
 
 	/**

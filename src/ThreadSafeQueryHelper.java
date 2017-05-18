@@ -69,6 +69,7 @@ public class ThreadSafeQueryHelper implements QueryInterface{
 			lock.unlockReadOnly();
 		}
 	}
+
 	
 	/**
 	 * Inner class to help parse

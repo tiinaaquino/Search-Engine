@@ -66,6 +66,7 @@ public class QueryHelper implements QueryInterface{
 	public void asJSON(Path path) throws IOException {
 		JSONWriter.asSearchObject(result, path);
 	}
+
 	
 	@Override
 	public String toString() {

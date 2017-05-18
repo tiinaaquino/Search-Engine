@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-
 /**
  * Stores object to JSON format
  */
@@ -199,52 +198,76 @@ public class JSONWriter {
 	}
 	
 	/**
-	 * Prints search object in JSON format.
-	 * 
+	 * helper method for JSON writer
+	 * @param writer
 	 * @param elements
-	 * 			elements to write as a JSON object with a nested array
-	 * @param path
-	 * 			path to write file
+	 * 			takes in the data structure
 	 * @throws IOException
 	 */
-	public static void asSearchObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-			writer.write("[\n");
-			int count = 0;
-			int queryNum = elements.size();
+	private static void asResultsArray(BufferedWriter writer, ArrayList<SearchResult> elements) throws IOException
+	{
+		int num = 0;
+		writer.write(indent(2) + quote("results") + ": [\n");
+		for (SearchResult searchResult : elements)
+		{
+			writer.write(indent(3) + "{\n");
+			writer.write(indent(4) + quote("where") + ": " + quote(searchResult.getPath()) + ",\n");
+			writer.write(indent(4) + quote("count") + ": " + searchResult.getFrequency() + ",\n");
+			writer.write(indent(4) + quote("index") + ": " + searchResult.getPosition() + "\n");
+			writer.write(indent(3) + "}");
 			
-			for (String query : elements.keySet()) {
-				int i = 0;
-				writer.write(indent(1) + "{\n");
-				writer.write(indent(2) + quote("queries") + ": " + quote(query) + ",\n");
-				writer.write(indent(2) + quote("results") + ": [\n");
+			int searchCount = elements.size();
+			while (num < searchCount-1)
+			{
+				writer.write(",\n");
+				num++;
+				break;
+			}
+		}
+		
+		if (elements.size() == 0)
+		{
+			writer.write(indent(2) + "]");
+			
+		}
+		else
+		{
+			writer.write("\n" + indent(2) + "]");
+			writer.flush();
+		}
+	}
+	
+	/**
+	 * Prints into JSON format given the raw data structure and path
+	 * @param elements
+	 * 			takes in the data structure
+	 * @param path
+	 * 			takes in the path
+	 * @throws IOException
+	 */
+	public static void asSearchObject(TreeMap<String, ArrayList<SearchResult>> elements, Path path) throws IOException
+	{
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8))
+		{
+			writer.write("[");
+			
+			int count = 0;
+			int numOfQueries = elements.size();
+			for (String q : elements.keySet())
+			{			
+				writer.write("\n" + indent(1) + "{\n");
+				writer.write(indent(2) + quote("queries") + ": " + quote(q) + ",\n");
+				JSONWriter.asResultsArray(writer, elements.get(q));
 				
-				for (SearchResult searchResult : elements.get(query)) {
-					writer.write(indent(3) + "{\n");
-					writer.write(indent(4) + quote("where") + ": " + quote(searchResult.getPath()) + ",\n");
-					writer.write(indent(4) + quote("count") + ": " + searchResult.getFrequency() + ",\n");
-					writer.write(indent(4) + quote("index") + ": " + searchResult.getPosition() + "\n");
-					writer.write(indent(3) + "}");
-					int searchCount = elements.get(query).size();
-					
-					while (i < searchCount - 1) {
-						writer.write(",");
-						i++;
-						break;
-					}
-					writer.write("\n");					
-				}
-				writer.write(indent(2) + "]\n");
-				writer.write(indent(1) + "}");
-				
-				while (count < queryNum - 1) {
+				writer.write("\n" + indent(1) + "}");
+				while (count < numOfQueries-1)
+				{
 					writer.write(",");
 					count++;
 					break;
 				}
-				writer.write("\n");
 			}
-			writer.write("]");
+			writer.write("\n]");
 		}
 	}
 }
