@@ -28,24 +28,6 @@ public class Project2SearchTest {
 		
 		@Test
 		public void testExactSearch01() {
-//			index.add("van", "", 5);
-//			index.add("car", "path1", 8);
-//			index.add("automobile", "path2", 79);
-//			
-//			System.out.println("INDEX = " + index);
-//			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van"});
-//			System.out.println("RESULT = " + result);
-//			
-//			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
-//			expected.add(new SearchResult("", 1, 5));
-//			expected.add(new SearchResult("path1", 1, 8));
-//			System.out.println("EXPECTED = " + expected);
-//			
-//			Assert.assertEquals(result, expected);
-		}
-		
-		@Test
-		public void testExactSearch02() {
 			index.add("van", "", 5);
 			index.add("car", "path1", 8);
 			index.add("automobile", "path2", 79);
@@ -62,24 +44,81 @@ public class Project2SearchTest {
 			Assert.assertNotEquals(result, expected);
 		}
 		
+		@Test
+		public void testExactSearch02() {
+			index.add("hater", "", 1);
+			index.add("that", "path1", 2);
+			index.add("hate", "path2", 3);
+			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"hat"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		}
+		
 		
 		@Test
 		public void testExactSearch03() {
-
+			index.add("courageous", "", 1);
+			index.add("car", "path1", 2);
+			index.add("current", "path2", 3);
+			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"cur"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
 		}
 		
 		
 		
 		@Test
 		public void testExactSearch04() {
-
+			index.add("apple", "", 1);
+			index.add("application", "path1", 2);
+			index.add("appetite", "path2", 3);
+			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"app"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
 		}
 		
 		
 		
 		@Test
 		public void testExactSearch05() {
-
+			index.add("basketball", "", 1);
+			index.add("football", "path1", 2);
+			index.add("baseball", "path2", 3);
+			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"ball"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
 		}		
 		
 	}
@@ -95,38 +134,106 @@ public class Project2SearchTest {
 		
 		@Test
 		public void testPartialSearch01() {
+			index.add("courageous", "", 1);
+			index.add("car", "path1", 2);
+			index.add("current", "path2", 3);
 			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.partialSearch( new String[]{"cur"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		
 		}
 		
 		
 		
 		@Test
 		public void testPartialSearch02() {
+			index.add("pot", "", 1);
+			index.add("path", "path1", 2);
+			index.add("pen", "path2", 3);
 			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.partialSearch( new String[]{"pot"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		
 		}
 		
 		
 		
 		@Test
 		public void testPartialSearch03() {
+			index.add("pot", "", 1);
+			index.add("path", "path1", 2);
+			index.add("pen", "path2", 3);
 			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.partialSearch( new String[]{"pot", "path", "pen"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		
 		}
 		
 		
 		
 		@Test
 		public void testPartialSearch04() {
+			index.add("popper", "", 1);
+			index.add("popping", "path1", 2);
+			index.add("popped", "path2", 3);
 			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.partialSearch( new String[]{"pop"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		
 		}
 		
 		
 		
 		@Test
 		public void testPartialSearch05() {
+			index.add("there", "", 1);
+			index.add("theater", "path1", 2);
+			index.add("seathe", "path2", 3);
 			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.partialSearch( new String[]{"the"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertNotEquals(result, expected);
+		
 		}
-		
-		
 		
 		
 	}
