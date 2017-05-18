@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -24,8 +26,24 @@ public class Project2SearchTest {
 			index = new InvertedIndex();
 		}
 		
-//		@Test
 		
+		@Test
+		public void testExactSearch01() {
+			index.add("van", "", 5);
+			index.add("car", "path1", 8);
+			index.add("automobile", "path2", 79);
+			
+			System.out.println(index);
+			ArrayList<SearchResult> result = index.exactSearch( new String[]{"van", "car"});
+			System.out.println(result);
+			
+			ArrayList<SearchResult> expected = new ArrayList<SearchResult>();
+			expected.add(new SearchResult("", 1, 5));
+			expected.add(new SearchResult("path1", 1, 8));
+			System.out.println(expected);
+			
+			Assert.assertEquals(result, expected);
+		}
 		
 		
 //		@Test
