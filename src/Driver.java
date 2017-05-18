@@ -23,6 +23,7 @@ public class Driver
 		
 		WebCrawler crawler = null;
 		int total;
+		@SuppressWarnings("unused")
 		URL url = null;
 		
 		try  {
