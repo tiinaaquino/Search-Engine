@@ -96,16 +96,13 @@ public class WebCrawler
 		this.MAX = 0;
 	}
 	
-	
 	public void crawl(URL url, int limit) throws MalformedURLException 
 	{
-		if (limit >= MAX)
-		{
+		if (limit >= MAX) {
 			MAX = limit;
 		}
 		
-		else
-		{
+		else {
 			limit=MAX;
 		}
 		
@@ -114,34 +111,27 @@ public class WebCrawler
 		queue.finish();
 	}
 	
-	private class CrawlWorker implements Runnable
-	{
+	private class CrawlWorker implements Runnable {
 		private URL url;
 		
-		private CrawlWorker(URL url)
-		{
+		private CrawlWorker(URL url) {
 			this.url = url;
-
 		}
 		
 		@Override
-		public void run()
-		{
+		public void run() {
 			String html = LinkParser.fetchHTML(url);
 			ArrayList<String> processedURL;
 			int count = 1;
-			try 
-			{
+			
+			try {
 				processedURL = LinkParser.listLinks(url, html);
-				synchronized (links) 
-				{
-					
-					for (String link : processedURL)
-					{
-						if (!links.contains(link))
-						{
-							if (links.size() >= MAX)
-							{
+				synchronized (links) {
+					for (String link : processedURL) {
+						
+						if (!links.contains(link)) {
+							
+							if (links.size() >= MAX) {
 								break;
 							}
 							links.add(link);
@@ -151,17 +141,15 @@ public class WebCrawler
 					}
 				}
 			} 
-			catch (MalformedURLException e)
-			{
-				
+			catch (MalformedURLException e) {
+				e.printStackTrace();
 			}
 
 			String cleaned = HTMLCleaner.stripHTML(html);
 			String[] words = WordParser.parseWords(cleaned);
-
 			int position = 1;
-			for (String word : words)
-			{
+			
+			for (String word : words) {
 				index.add(word, url.toString(), position);
 				position++;
 			}
