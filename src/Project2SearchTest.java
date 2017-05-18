@@ -16,22 +16,65 @@ public class Project2SearchTest {
 	
 	
 	public static class ExactTest {
-		private String[] words;
+		private String[] sampleWords;
 		private InvertedIndex index;
 		
 		@Before
 		public void setup() {
 			index = new InvertedIndex();
 		}
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
 	}
 	
 	public static class PartialTest {
-		private String[] words;
+		private String[] sampleWords;
 		private InvertedIndex index;
 		
 		@Before
 		public void setup() {
 			index = new InvertedIndex();
 		}
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+//		@Test
+		
+		
+		
+		
 	}
 }
